@@ -33,8 +33,8 @@ class EditorApp:
         self.current_border_width = tk.DoubleVar(value=0)
         self.current_shape_width_cm = tk.DoubleVar(value="5.0")
         self.current_shape_height_cm = tk.DoubleVar(value="5.0")
-        self.current_image_width = tk.DoubleVar(value=100)  # New variable for image width
-        self.current_image_height = tk.DoubleVar(value=100)  # New variable for image height
+        self.current_image_width = tk.DoubleVar(value=100)
+        self.current_image_height = tk.DoubleVar(value=100)
         self.font_bold = tk.BooleanVar(value=False)
         self.font_italic = tk.BooleanVar(value=False)
         self.font_underline = tk.BooleanVar(value=False)
@@ -43,80 +43,68 @@ class EditorApp:
         self.border_color = "black"
         self.fill_color = "white"
         self.max_radius = 50
-        self.DPI = 96  # 1 cm = 37.8 pixel tại 96 DPI
-        self.CM_TO_PIXEL = self.DPI / 2.54  # 1 cm = 37.8 pixel
+        self.DPI = 96
+        self.CM_TO_PIXEL = self.DPI / 2.54
 
         self.main_frame = ttk.Frame(self.root, padding="10")
         self.main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
-        # Cấu hình trọng số cột và hàng cho main_frame
-        self.main_frame.grid_rowconfigure(0, weight=1)    # Hàng chứa canvas và listbox sẽ co giãn dọc
-        self.main_frame.grid_rowconfigure(1, weight=0)    # Hàng chứa nút top/manipulation
-        self.main_frame.grid_rowconfigure(2, weight=0)    # Hàng chứa edit_frame
-        self.main_frame.grid_columnconfigure(0, weight=1) # Cột canvas sẽ co giãn ngang
-        self.main_frame.grid_columnconfigure(1, weight=0) # Cột listbox không co giãn 
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_rowconfigure(1, weight=0)
+        self.main_frame.grid_rowconfigure(2, weight=0)
+        self.main_frame.grid_columnconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(1, weight=0)
 
-        # Canvas nên chiếm toàn bộ phần trên của ứng dụng
         self.canvas = tk.Canvas(self.main_frame, bg="white")
         self.canvas.grid(row=0, column=0, columnspan=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 5), pady=(0, 5))
 
-        # Frame cho danh sách đối tượng và thanh cuộn # Cột 1, hàng 0
         self.object_list_frame = ttk.Frame(self.main_frame)
         self.object_list_frame.grid(row=0, column=2, sticky=(tk.N, tk.S, tk.W, tk.E), padx=5, pady=5)
-        self.main_frame.grid_rowconfigure(0, weight=1) # Đảm bảo hàng 0 co giãn
-        self.main_frame.grid_columnconfigure(1, weight=0) # Cột listbox có thể không cần co giãn nhiều
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(1, weight=0)
 
-        # Tạo Listbox và Scrollbar bên trong object_list_frame
         self.object_listbox = tk.Listbox(self.object_list_frame, selectmode=tk.SINGLE, exportselection=False)
         self.list_scrollbar = ttk.Scrollbar(self.object_list_frame, orient=tk.VERTICAL, command=self.object_listbox.yview)
         self.object_listbox.config(yscrollcommand=self.list_scrollbar.set)
-        self.list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y) # Thêm pack scrollbar
+        self.list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.object_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.object_listbox.bind('<<ListboxSelect>>', self.on_listbox_select)
-        
-        # Đặt các button frame vào hàng mới để không bị mất khi phóng to
+
         self.top_button_frame = ttk.Frame(self.main_frame)
         self.top_button_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=(5, 0), pady=(0, 5))
 
-        # Cấu hình weight cho button_frame để các nút được sắp xếp đều
         self.top_button_frame.grid_columnconfigure(0, weight=1)
         self.top_button_frame.grid_columnconfigure(1, weight=1)
         self.top_button_frame.grid_columnconfigure(2, weight=1)
 
-        # Create a frame for the top buttons
         self.load_button = ttk.Button(self.top_button_frame, text="Load Image", command=self.canvas_logic.upload_image)
         self.load_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
-        
+
         self.add_text_button = ttk.Button(self.top_button_frame, text="Add Text", command=self.canvas_logic.add_text)
         self.add_text_button.grid(row=0, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
-        
+
         self.add_shape_button = ttk.Button(self.top_button_frame, text="Add Shape", command=self.canvas_logic.add_shape)
         self.add_shape_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
 
-        # Frame cho các nút điều khiển đối tượng
         self.manipulation_frame = ttk.Frame(self.main_frame)
         self.manipulation_frame.grid(row=1, column=2, sticky=(tk.W, tk.E), padx=5, pady=5)
 
-         # Cấu hình weight cho manipulation_frame
         self.manipulation_frame.grid_columnconfigure(0, weight=1)
         self.manipulation_frame.grid_columnconfigure(1, weight=1)
         self.manipulation_frame.grid_columnconfigure(2, weight=1)
 
-
         self.duplicate_button = ttk.Button(self.manipulation_frame, text="Duplicate", command=self.canvas_logic.duplicate_selected_object, state=tk.DISABLED)
         self.duplicate_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
-        
+
         self.delete_button = ttk.Button(self.manipulation_frame, text="Delete", command=self.canvas_logic.delete_selected_object, state=tk.DISABLED)
         self.delete_button.grid(row=0, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
-        
+
         self.lock_button = ttk.Button(self.manipulation_frame, text="Lock/Unlock", command=self.canvas_logic.lock_object)
         self.lock_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
-        
-        # Frame chỉnh sửa thuộc tính
+
         self.edit_frame = ttk.LabelFrame(self.main_frame, text="Edit Properties", padding="5")
         self.edit_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), padx=5, pady=5)
 
-         # Thêm sự kiện phát hiện thay đổi kích thước
         self.root.bind("<Configure>", self.on_window_resize)
 
         # Text controls
@@ -156,76 +144,69 @@ class EditorApp:
         self.stroke_color_button = ttk.Button(self.edit_frame, text="Pick Stroke Color", command=self.text_logic.pick_stroke_color)
         self.stroke_color_button.grid(row=6, column=0, columnspan=3, pady=2)
 
-        self.align_label = ttk.Label(self.edit_frame, text="Alignment:")
-        self.align_label.grid(row=7, column=0, sticky=tk.W, pady=2)
-        self.align_combo = ttk.Combobox(self.edit_frame, values=["left", "center", "right"], state="readonly")
-        self.align_combo.set("center")
-        self.align_combo.grid(row=7, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
-        self.align_combo.bind("<<ComboboxSelected>>", self.text_logic.update_alignment)
-
         self.transparency_label = ttk.Label(self.edit_frame, text="Transparency: 255")
-        self.transparency_label.grid(row=8, column=0, sticky=tk.W, pady=2)
+        self.transparency_label.grid(row=7, column=0, sticky=tk.W, pady=2)
         self.transparency_scale = ttk.Scale(self.edit_frame, from_=0, to=255, orient=tk.HORIZONTAL, variable=self.current_transparency, command=self.update_transparency)
-        self.transparency_scale.grid(row=8, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.transparency_scale.grid(row=7, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         # Shape controls
         self.shape_width_label = ttk.Label(self.edit_frame, text="Shape Width (cm):")
-        self.shape_width_label.grid(row=9, column=0, sticky=tk.W, pady=2)
+        self.shape_width_label.grid(row=8, column=0, sticky=tk.W, pady=2)
         self.shape_width_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_width_cm, command=lambda value: self.shape_logic.update_shape_size())
-        self.shape_width_scale.grid(row=9, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.shape_width_scale.grid(row=8, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.shape_height_label = ttk.Label(self.edit_frame, text="Shape Height (cm):")
-        self.shape_height_label.grid(row=10, column=0, sticky=tk.W, pady=2)
+        self.shape_height_label.grid(row=9, column=0, sticky=tk.W, pady=2)
         self.shape_height_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_height_cm, command=lambda value: self.shape_logic.update_shape_size())
-        self.shape_height_scale.grid(row=10, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.shape_height_scale.grid(row=9, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.apply_size_button = ttk.Button(self.edit_frame, text="Apply Size", command=self.shape_logic.update_shape_size)
-        self.apply_size_button.grid(row=11, column=0, columnspan=3, pady=2)
+        self.apply_size_button.grid(row=10, column=0, columnspan=3, pady=2)
 
         self.shape_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.shape_logic.pick_shape_border_color)
-        self.shape_border_color_button.grid(row=12, column=0, columnspan=3, pady=2)
+        self.shape_border_color_button.grid(row=11, column=0, columnspan=3, pady=2)
 
         self.shape_fill_color_button = ttk.Button(self.edit_frame, text="Pick Fill Color", command=self.shape_logic.pick_shape_fill_color)
-        self.shape_fill_color_button.grid(row=13, column=0, columnspan=3, pady=2)
+        self.shape_fill_color_button.grid(row=12, column=0, columnspan=3, pady=2)
 
         self.shape_border_width_label = ttk.Label(self.edit_frame, text="Border Width: 0")
-        self.shape_border_width_label.grid(row=14, column=0, sticky=tk.W, pady=2)
+        self.shape_border_width_label.grid(row=13, column=0, sticky=tk.W, pady=2)
         self.shape_border_width_scale = ttk.Scale(self.edit_frame, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.current_border_width, command=self.shape_logic.update_shape_border_width)
-        self.shape_border_width_scale.grid(row=14, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.shape_border_width_scale.grid(row=13, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.shape_corner_label = ttk.Label(self.edit_frame, text="Corner Radius: 0")
-        self.shape_corner_label.grid(row=15, column=0, sticky=tk.W, pady=2)
+        self.shape_corner_label.grid(row=14, column=0, sticky=tk.W, pady=2)
         self.shape_corner_scale = ttk.Scale(self.edit_frame, from_=0, to=self.max_radius, orient=tk.HORIZONTAL, variable=self.current_corner_radius, command=self.shape_logic.update_shape_corner)
-        self.shape_corner_scale.grid(row=15, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.shape_corner_scale.grid(row=14, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         # Image controls
-        self.image_width_label = ttk.Label(self.edit_frame, text="Image Width (px):")  # New label
-        self.image_width_label.grid(row=16, column=0, sticky=tk.W, pady=2)
+        self.image_width_label = ttk.Label(self.edit_frame, text="Image Width (px):")
+        self.image_width_label.grid(row=15, column=0, sticky=tk.W, pady=2)
         self.image_width_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_width, command=self.image_logic.update_image_size)
-        self.image_width_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_width_scale.grid(row=15, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
-        self.image_height_label = ttk.Label(self.edit_frame, text="Image Height (px):")  # New label
-        self.image_height_label.grid(row=17, column=0, sticky=tk.W, pady=2)
+        self.image_height_label = ttk.Label(self.edit_frame, text="Image Height (px):")
+        self.image_height_label.grid(row=16, column=0, sticky=tk.W, pady=2)
         self.image_height_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_height, command=self.image_logic.update_image_size)
-        self.image_height_scale.grid(row=17, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_height_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_corner_label = ttk.Label(self.edit_frame, text="Corner Radius: 0")
-        self.image_corner_label.grid(row=18, column=0, sticky=tk.W, pady=2)
+        self.image_corner_label.grid(row=17, column=0, sticky=tk.W, pady=2)
         self.image_corner_scale = ttk.Scale(self.edit_frame, from_=0, to=self.max_radius, orient=tk.HORIZONTAL, variable=self.current_corner_radius, command=self.image_logic.update_image_corner)
-        self.image_corner_scale.grid(row=18, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_corner_scale.grid(row=17, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_border_width_label = ttk.Label(self.edit_frame, text="Border Width: 0")
-        self.image_border_width_label.grid(row=19, column=0, sticky=tk.W, pady=2)
+        self.image_border_width_label.grid(row=18, column=0, sticky=tk.W, pady=2)
         self.image_border_width_scale = ttk.Scale(self.edit_frame, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.current_border_width, command=self.image_logic.update_image_border_width)
-        self.image_border_width_scale.grid(row=19, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_border_width_scale.grid(row=18, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.image_logic.pick_image_border_color)
-        self.image_border_color_button.grid(row=20, column=0, columnspan=3, pady=2)
+        self.image_border_color_button.grid(row=19, column=0, columnspan=3, pady=2)
 
         self.flip_h_button = ttk.Button(self.edit_frame, text="Flip Horizontal", command=self.image_logic.flip_horizontal)
-        self.flip_h_button.grid(row=21, column=0, pady=2)
+        self.flip_h_button.grid(row=20, column=0, pady=2)
         self.flip_v_button = ttk.Button(self.edit_frame, text="Flip Vertical", command=self.image_logic.flip_vertical)
-        self.flip_v_button.grid(row=21, column=1, pady=2)
+        self.flip_v_button.grid(row=20, column=1, pady=2)
 
         self.canvas.bind("<Button-1>", self.canvas_logic.select_object)
         self.canvas.bind("<B1-Motion>", self.canvas_logic.drag_object)
@@ -235,38 +216,34 @@ class EditorApp:
 
     def update_object_list(self):
         """Cập nhật danh sách đối tượng trong Listbox"""
-        selected_index = self.object_listbox.curselection() # Lưu lựa chọn hiện tại
+        selected_index = self.object_listbox.curselection()
         self.object_listbox.delete(0, tk.END)
         for i, obj in enumerate(self.canvas_logic.objects):
-            # Tạo chuỗi hiển thị (ví dụ)
             display_text = f"{i+1}. {obj['type'].capitalize()}"
             if obj['type'] == 'text':
-                display_text += f": {obj.get('text', '')[:15]}" # Hiển thị 15 ký tự đầu
+                display_text += f": {obj.get('text', '')[:15]}"
             elif obj['type'] == 'image':
-                 # Có thể thêm tên file nếu lưu
-                 pass
+                pass
             elif obj['type'] == 'shape':
-                 display_text += f" ({obj.get('shape_type', '')})"
+                display_text += f" ({obj.get('shape_type', '')})"
 
             if obj.get("locked", False):
                 display_text += " (Locked)"
 
             self.object_listbox.insert(tk.END, display_text)
 
-        # Khôi phục lựa chọn nếu có thể
         if selected_index and selected_index[0] < self.object_listbox.size():
-             self.object_listbox.selection_set(selected_index[0])
-             self.object_listbox.activate(selected_index[0])
-             self.object_listbox.see(selected_index[0])
+            self.object_listbox.selection_set(selected_index[0])
+            self.object_listbox.activate(selected_index[0])
+            self.object_listbox.see(selected_index[0])
         elif self.canvas_logic.selected_object:
-             # Nếu không có lựa chọn listbox nhưng có trên canvas, thử chọn lại listbox
-             try:
-                 idx = self.canvas_logic.objects.index(self.canvas_logic.selected_object)
-                 self.object_listbox.selection_set(idx)
-                 self.object_listbox.activate(idx)
-                 self.object_listbox.see(idx)
-             except ValueError:
-                 pass # Object không có trong list?
+            try:
+                idx = self.canvas_logic.objects.index(self.canvas_logic.selected_object)
+                self.object_listbox.selection_set(idx)
+                self.object_listbox.activate(idx)
+                self.object_listbox.see(idx)
+            except ValueError:
+                pass
 
     def on_listbox_select(self, event):
         """Xử lý khi một mục trong Listbox được chọn"""
@@ -276,18 +253,13 @@ class EditorApp:
             index = selected_indices[0]
             if 0 <= index < len(self.canvas_logic.objects):
                 obj_to_select = self.canvas_logic.objects[index]
-                # Chỉ chọn nếu đối tượng chưa được chọn (tránh vòng lặp vô hạn)
                 if obj_to_select != self.canvas_logic.selected_object:
-                    self.canvas_logic.select_object_by_instance(obj_to_select) # Cần tạo hàm này
-
+                    self.canvas_logic.select_object_by_instance(obj_to_select)
 
     def on_window_resize(self, event):
-        # Chỉ xử lý sự kiện từ root window
         if event.widget == self.root:
-            # Tính toán kích thước mới cho canvas
-            width = event.width - 40  # Giảm một chút để có padding
-            height = event.height - 250  # Giảm chiều cao để còn chỗ cho các điều khiển
-            
+            width = event.width - 40
+            height = event.height - 250
             if width > 0 and height > 0:
                 self.canvas.config(width=width, height=height)
 
@@ -295,8 +267,7 @@ class EditorApp:
         """Ẩn tất cả các điều khiển chỉnh sửa"""
         for widget in self.edit_frame.winfo_children():
             widget.grid_remove()
-        
-        # Disable manipulation buttons when no object is selected
+
         self.duplicate_button.config(state=tk.DISABLED)
         self.delete_button.config(state=tk.DISABLED)
         self.lock_button.config(state=tk.DISABLED)
@@ -307,11 +278,9 @@ class EditorApp:
         self.update_object_list()
         self.hide_all_controls()
         selected_obj = self.canvas_logic.get_selected_object()
-         # Đồng bộ listbox selection với canvas selection
         if selected_obj:
             try:
                 idx = self.canvas_logic.objects.index(selected_obj)
-                # Chỉ set nếu listbox chưa đúng selection (tránh vòng lặp)
                 current_list_sel = self.object_listbox.curselection()
                 if not current_list_sel or current_list_sel[0] != idx:
                     self.object_listbox.selection_clear(0, tk.END)
@@ -319,18 +288,14 @@ class EditorApp:
                     self.object_listbox.activate(idx)
                     self.object_listbox.see(idx)
             except ValueError:
-                 self.object_listbox.selection_clear(0, tk.END) # Object ko trong list? Clear selection
+                self.object_listbox.selection_clear(0, tk.END)
         else:
-             self.object_listbox.selection_clear(0, tk.END) # Không có object nào được chọn
+            self.object_listbox.selection_clear(0, tk.END)
 
-        # Enable/disable buttons based on selection and lock status
         if selected_obj:
-            # For locked objects, only allow unlock action
             is_locked = selected_obj.get("locked", False)
-            # Always enable lock button
             self.lock_button.config(state=tk.NORMAL)
             self.lock_button.config(text="Unlock" if is_locked else "Lock")
-            # Enable duplicate and delete only for unlocked objects
             if is_locked:
                 self.duplicate_button.config(state=tk.DISABLED)
                 self.delete_button.config(state=tk.DISABLED)
@@ -344,11 +309,9 @@ class EditorApp:
             self.lock_button.config(text="Lock/Unlock")
 
         if selected_obj:
-            # Disable all editing controls if object is locked
             is_locked = selected_obj.get("locked", False)
             control_state = tk.DISABLED if is_locked else tk.NORMAL
             if selected_obj["type"] == "text":
-                # Setup text controls
                 self.text_entry.delete(0, tk.END)
                 self.text_entry.insert(0, selected_obj.get("text", ""))
                 self.font_combo.set(selected_obj.get("font_name", "Arial"))
@@ -359,13 +322,11 @@ class EditorApp:
                 self.text_color = selected_obj.get("text_color", "black")
                 self.current_stroke_width.set(selected_obj.get("stroke_width", 0))
                 self.stroke_color = selected_obj.get("stroke_color", "black")
-                self.align_combo.set(selected_obj.get("alignment", "center"))
                 self.current_transparency.set(selected_obj.get("alpha", 1.0) * 255)
                 self.font_size_label.config(text=f"Font Size: {int(self.current_font_size.get())}")
                 self.stroke_width_label.config(text=f"Stroke Width: {int(self.current_stroke_width.get())}")
                 self.transparency_label.config(text=f"Transparency: {int(self.current_transparency.get())}")
 
-                # Show text controls
                 self.text_label.grid()
                 self.text_entry.grid()
                 self.font_label.grid()
@@ -379,11 +340,9 @@ class EditorApp:
                 self.stroke_width_label.grid()
                 self.stroke_width_scale.grid()
                 self.stroke_color_button.grid()
-                self.align_label.grid()
-                self.align_combo.grid()
-                self.transparency_label.grid()
-                self.transparency_scale.grid()
-                # Set control state based on lock status
+                # self.transparency_label.grid()
+                # self.transparency_scale.grid()
+
                 if is_locked:
                     self.text_entry.config(state=tk.DISABLED)
                     self.font_combo.config(state=tk.DISABLED)
@@ -394,7 +353,6 @@ class EditorApp:
                     self.text_color_button.config(state=tk.DISABLED)
                     self.stroke_width_scale.config(state=tk.DISABLED)
                     self.stroke_color_button.config(state=tk.DISABLED)
-                    self.align_combo.config(state=tk.DISABLED)
                     self.transparency_scale.config(state=tk.DISABLED)
                 else:
                     self.text_entry.config(state=tk.NORMAL)
@@ -406,10 +364,8 @@ class EditorApp:
                     self.text_color_button.config(state=tk.NORMAL)
                     self.stroke_width_scale.config(state=tk.NORMAL)
                     self.stroke_color_button.config(state=tk.NORMAL)
-                    self.align_combo.config(state="readonly")
                     self.transparency_scale.config(state=tk.NORMAL)
             elif selected_obj["type"] == "shape":
-                # Setup shape controls
                 self.current_shape_width_cm.set(selected_obj.get("width_cm", 5.0))
                 self.current_shape_height_cm.set(selected_obj.get("height_cm", 5.0))
                 self.border_color = selected_obj.get("border_color", "black")
@@ -424,7 +380,7 @@ class EditorApp:
                 self.shape_corner_scale.configure(to=self.max_radius)
                 self.shape_width_label.config(text=f"Width (cm): {float(self.current_shape_width_cm.get()):.1f}")
                 self.shape_height_label.config(text=f"Height (cm): {float(self.current_shape_height_cm.get()):.1f}")
-                # Show shape controls
+
                 self.shape_width_label.grid()
                 self.shape_width_scale.grid()
                 self.shape_height_label.grid()
@@ -434,7 +390,6 @@ class EditorApp:
                 self.shape_border_width_label.grid()
                 self.shape_border_width_scale.grid()
 
-                # Set control state based on lock status
                 if is_locked:
                     self.shape_width_scale.config(state=tk.DISABLED)
                     self.shape_height_scale.config(state=tk.DISABLED)
@@ -454,14 +409,12 @@ class EditorApp:
                     self.shape_corner_scale.config(state=tk.NORMAL)
                     self.transparency_scale.config(state=tk.NORMAL)
 
-                # Chỉ hiển thị bo góc cho rectangle và square
                 if selected_obj["shape_type"] in ["rectangle", "square"]:
                     self.shape_corner_label.grid()
                     self.shape_corner_scale.grid()
                 self.transparency_label.grid()
                 self.transparency_scale.grid()
-            else:  # image
-                # Setup image controls
+            else:
                 self.current_transparency.set(selected_obj.get("alpha", 1.0) * 255)
                 self.current_corner_radius.set(selected_obj.get("round_radius", 0))
                 self.current_border_width.set(selected_obj.get("border_width", 0))
@@ -475,7 +428,7 @@ class EditorApp:
                 self.image_border_width_label.config(text=f"Border Width: {int(self.current_border_width.get())}")
                 self.image_width_label.config(text=f"Image Width (px): {int(self.current_image_width.get())}")
                 self.image_height_label.config(text=f"Image Height (px): {int(self.current_image_height.get())}")
-                # Show image controls
+
                 self.transparency_label.grid()
                 self.transparency_scale.grid()
                 self.image_width_label.grid()
@@ -489,7 +442,7 @@ class EditorApp:
                 self.image_border_color_button.grid()
                 self.flip_h_button.grid()
                 self.flip_v_button.grid()
-                # Set control state based on lock status
+
                 if is_locked:
                     self.transparency_scale.config(state=tk.DISABLED)
                     self.image_width_scale.config(state=tk.DISABLED)
