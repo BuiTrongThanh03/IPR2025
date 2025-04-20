@@ -10,6 +10,18 @@ class EditorApp:
     def __init__(self, root, logic):
         self.root = root
         self.root.title("Text, Image, and Shape Editor")
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
+
+        # Thiết lập kích thước cửa sổ ban đầu
+        window_width = 1000
+        window_height = 700
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
         self.canvas_logic = CanvasEditorLogic(self)
         self.text_logic = TextLogic(self, self.canvas_logic)
         self.shape_logic = ShapeLogic(self, self.canvas_logic)
@@ -30,40 +42,82 @@ class EditorApp:
         self.stroke_color = "black"
         self.border_color = "black"
         self.fill_color = "white"
-        self.max_radius = 500
+        self.max_radius = 50
         self.DPI = 96  # 1 cm = 37.8 pixel tại 96 DPI
         self.CM_TO_PIXEL = self.DPI / 2.54  # 1 cm = 37.8 pixel
 
         self.main_frame = ttk.Frame(self.root, padding="10")
         self.main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
-        self.canvas = tk.Canvas(self.main_frame, width=400, height=400, bg="white")
-        self.canvas.grid(row=0, column=0, columnspan=3, pady=5)
+        # Cấu hình trọng số cột và hàng cho main_frame
+        self.main_frame.grid_rowconfigure(0, weight=1)    # Hàng chứa canvas và listbox sẽ co giãn dọc
+        self.main_frame.grid_rowconfigure(1, weight=0)    # Hàng chứa nút top/manipulation
+        self.main_frame.grid_rowconfigure(2, weight=0)    # Hàng chứa edit_frame
+        self.main_frame.grid_columnconfigure(0, weight=1) # Cột canvas sẽ co giãn ngang
+        self.main_frame.grid_columnconfigure(1, weight=0) # Cột listbox không co giãn 
+
+        # Canvas nên chiếm toàn bộ phần trên của ứng dụng
+        self.canvas = tk.Canvas(self.main_frame, bg="white")
+        self.canvas.grid(row=0, column=0, columnspan=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 5), pady=(0, 5))
+
+        # Frame cho danh sách đối tượng và thanh cuộn # Cột 1, hàng 0
+        self.object_list_frame = ttk.Frame(self.main_frame)
+        self.object_list_frame.grid(row=0, column=2, sticky=(tk.N, tk.S, tk.W, tk.E), padx=5, pady=5)
+        self.main_frame.grid_rowconfigure(0, weight=1) # Đảm bảo hàng 0 co giãn
+        self.main_frame.grid_columnconfigure(1, weight=0) # Cột listbox có thể không cần co giãn nhiều
+
+        # Tạo Listbox và Scrollbar bên trong object_list_frame
+        self.object_listbox = tk.Listbox(self.object_list_frame, selectmode=tk.SINGLE, exportselection=False)
+        self.list_scrollbar = ttk.Scrollbar(self.object_list_frame, orient=tk.VERTICAL, command=self.object_listbox.yview)
+        self.object_listbox.config(yscrollcommand=self.list_scrollbar.set)
+        self.list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y) # Thêm pack scrollbar
+        self.object_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.object_listbox.bind('<<ListboxSelect>>', self.on_listbox_select)
+        
+        # Đặt các button frame vào hàng mới để không bị mất khi phóng to
+        self.top_button_frame = ttk.Frame(self.main_frame)
+        self.top_button_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=(5, 0), pady=(0, 5))
+
+        # Cấu hình weight cho button_frame để các nút được sắp xếp đều
+        self.top_button_frame.grid_columnconfigure(0, weight=1)
+        self.top_button_frame.grid_columnconfigure(1, weight=1)
+        self.top_button_frame.grid_columnconfigure(2, weight=1)
 
         # Create a frame for the top buttons
-        self.top_button_frame = ttk.Frame(self.main_frame)
-        self.top_button_frame.grid(row=1, column=0, columnspan=3, pady=5)
         self.load_button = ttk.Button(self.top_button_frame, text="Load Image", command=self.canvas_logic.upload_image)
-        self.load_button.grid(row=0, column=0, padx=5)
+        self.load_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
+        
         self.add_text_button = ttk.Button(self.top_button_frame, text="Add Text", command=self.canvas_logic.add_text)
-        self.add_text_button.grid(row=0, column=1, padx=5)
+        self.add_text_button.grid(row=0, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
+        
         self.add_shape_button = ttk.Button(self.top_button_frame, text="Add Shape", command=self.canvas_logic.add_shape)
-        self.add_shape_button.grid(row=0, column=2, padx=5)
+        self.add_shape_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
 
-        # Buttons for object manipulation
+        # Frame cho các nút điều khiển đối tượng
         self.manipulation_frame = ttk.Frame(self.main_frame)
-        self.manipulation_frame.grid(row=1, column=3, pady=5)
+        self.manipulation_frame.grid(row=1, column=2, sticky=(tk.W, tk.E), padx=5, pady=5)
+
+         # Cấu hình weight cho manipulation_frame
+        self.manipulation_frame.grid_columnconfigure(0, weight=1)
+        self.manipulation_frame.grid_columnconfigure(1, weight=1)
+        self.manipulation_frame.grid_columnconfigure(2, weight=1)
+
 
         self.duplicate_button = ttk.Button(self.manipulation_frame, text="Duplicate", command=self.canvas_logic.duplicate_selected_object, state=tk.DISABLED)
-        self.duplicate_button.grid(row=0, column=0, padx=5)
-
+        self.duplicate_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
+        
         self.delete_button = ttk.Button(self.manipulation_frame, text="Delete", command=self.canvas_logic.delete_selected_object, state=tk.DISABLED)
-        self.delete_button.grid(row=0, column=1, padx=5)
-
+        self.delete_button.grid(row=0, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
+        
         self.lock_button = ttk.Button(self.manipulation_frame, text="Lock/Unlock", command=self.canvas_logic.lock_object)
-        self.lock_button.grid(row=0, column=2, padx=5)
+        self.lock_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
+        
+        # Frame chỉnh sửa thuộc tính
         self.edit_frame = ttk.LabelFrame(self.main_frame, text="Edit Properties", padding="5")
-        self.edit_frame.grid(row=2, column=0, columnspan=3, pady=5, sticky=(tk.W, tk.E))
+        self.edit_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), padx=5, pady=5)
+
+         # Thêm sự kiện phát hiện thay đổi kích thước
+        self.root.bind("<Configure>", self.on_window_resize)
 
         # Text controls
         self.text_label = ttk.Label(self.edit_frame, text="Text Content:")
@@ -179,6 +233,64 @@ class EditorApp:
 
         self.hide_all_controls()
 
+    def update_object_list(self):
+        """Cập nhật danh sách đối tượng trong Listbox"""
+        selected_index = self.object_listbox.curselection() # Lưu lựa chọn hiện tại
+        self.object_listbox.delete(0, tk.END)
+        for i, obj in enumerate(self.canvas_logic.objects):
+            # Tạo chuỗi hiển thị (ví dụ)
+            display_text = f"{i+1}. {obj['type'].capitalize()}"
+            if obj['type'] == 'text':
+                display_text += f": {obj.get('text', '')[:15]}" # Hiển thị 15 ký tự đầu
+            elif obj['type'] == 'image':
+                 # Có thể thêm tên file nếu lưu
+                 pass
+            elif obj['type'] == 'shape':
+                 display_text += f" ({obj.get('shape_type', '')})"
+
+            if obj.get("locked", False):
+                display_text += " (Locked)"
+
+            self.object_listbox.insert(tk.END, display_text)
+
+        # Khôi phục lựa chọn nếu có thể
+        if selected_index and selected_index[0] < self.object_listbox.size():
+             self.object_listbox.selection_set(selected_index[0])
+             self.object_listbox.activate(selected_index[0])
+             self.object_listbox.see(selected_index[0])
+        elif self.canvas_logic.selected_object:
+             # Nếu không có lựa chọn listbox nhưng có trên canvas, thử chọn lại listbox
+             try:
+                 idx = self.canvas_logic.objects.index(self.canvas_logic.selected_object)
+                 self.object_listbox.selection_set(idx)
+                 self.object_listbox.activate(idx)
+                 self.object_listbox.see(idx)
+             except ValueError:
+                 pass # Object không có trong list?
+
+    def on_listbox_select(self, event):
+        """Xử lý khi một mục trong Listbox được chọn"""
+        widget = event.widget
+        selected_indices = widget.curselection()
+        if selected_indices:
+            index = selected_indices[0]
+            if 0 <= index < len(self.canvas_logic.objects):
+                obj_to_select = self.canvas_logic.objects[index]
+                # Chỉ chọn nếu đối tượng chưa được chọn (tránh vòng lặp vô hạn)
+                if obj_to_select != self.canvas_logic.selected_object:
+                    self.canvas_logic.select_object_by_instance(obj_to_select) # Cần tạo hàm này
+
+
+    def on_window_resize(self, event):
+        # Chỉ xử lý sự kiện từ root window
+        if event.widget == self.root:
+            # Tính toán kích thước mới cho canvas
+            width = event.width - 40  # Giảm một chút để có padding
+            height = event.height - 250  # Giảm chiều cao để còn chỗ cho các điều khiển
+            
+            if width > 0 and height > 0:
+                self.canvas.config(width=width, height=height)
+
     def hide_all_controls(self):
         """Ẩn tất cả các điều khiển chỉnh sửa"""
         for widget in self.edit_frame.winfo_children():
@@ -192,8 +304,25 @@ class EditorApp:
 
     def update_controls(self):
         """Cập nhật giao diện điều khiển dựa trên đối tượng được chọn"""
+        self.update_object_list()
         self.hide_all_controls()
         selected_obj = self.canvas_logic.get_selected_object()
+         # Đồng bộ listbox selection với canvas selection
+        if selected_obj:
+            try:
+                idx = self.canvas_logic.objects.index(selected_obj)
+                # Chỉ set nếu listbox chưa đúng selection (tránh vòng lặp)
+                current_list_sel = self.object_listbox.curselection()
+                if not current_list_sel or current_list_sel[0] != idx:
+                    self.object_listbox.selection_clear(0, tk.END)
+                    self.object_listbox.selection_set(idx)
+                    self.object_listbox.activate(idx)
+                    self.object_listbox.see(idx)
+            except ValueError:
+                 self.object_listbox.selection_clear(0, tk.END) # Object ko trong list? Clear selection
+        else:
+             self.object_listbox.selection_clear(0, tk.END) # Không có object nào được chọn
+
         # Enable/disable buttons based on selection and lock status
         if selected_obj:
             # For locked objects, only allow unlock action
@@ -213,6 +342,7 @@ class EditorApp:
             self.delete_button.config(state=tk.DISABLED)
             self.lock_button.config(state=tk.DISABLED)
             self.lock_button.config(text="Lock/Unlock")
+
         if selected_obj:
             # Disable all editing controls if object is locked
             is_locked = selected_obj.get("locked", False)

@@ -43,6 +43,7 @@ class CanvasEditorLogic:
             self.objects.append(obj)
             canvas_id = self.ui.canvas.create_image(50, 50, image=obj["photo"], anchor="nw")
             obj["canvas_id"] = canvas_id
+            self.ui.update_object_list()
             self.clear_selection()
             self.selected_object = obj
             self.highlight_object(obj)
@@ -193,6 +194,7 @@ class CanvasEditorLogic:
                     obj["photo"] = ImageTk.PhotoImage(img)
                     canvas_id = self.ui.canvas.create_image(50, 50, image=obj["photo"], anchor="nw")
                     obj["canvas_id"] = canvas_id
+                    self.ui.update_object_list()
                     self.clear_selection()
                     self.selected_object = obj
                     self.highlight_object(obj)
@@ -308,6 +310,7 @@ class CanvasEditorLogic:
                 obj["photo"] = ImageTk.PhotoImage(img)
                 canvas_id = self.ui.canvas.create_image(50, 50, image=obj["photo"], anchor="nw")
                 obj["canvas_id"] = canvas_id
+                self.ui.update_object_list()
                 self.clear_selection()
                 self.selected_object = obj
                 self.highlight_object(obj)
@@ -370,6 +373,18 @@ class CanvasEditorLogic:
                         self.highlight_object(obj)
                         self.ui.update_controls()
                         break
+            self.ui.update_controls()
+
+    # --- Thêm phương thức để chọn object từ instance (dùng cho listbox) ---
+    def select_object_by_instance(self, obj_instance):
+        """Chọn một đối tượng cụ thể dựa trên instance của nó."""
+        if obj_instance in self.objects:
+            self.clear_selection()
+            self.selected_object = obj_instance
+            self.highlight_object(obj_instance)
+            self.ui.update_controls() # Gọi update_controls để cập nhật cả UI và listbox highlight
+        else:
+            self.clear_selection() # Nếu object không tồn tại, xóa lựa chọn
 
     def clear_selection(self):
         """Xóa lựa chọn hiện tại"""
@@ -379,7 +394,7 @@ class CanvasEditorLogic:
         if self.selection_rect:
             self.ui.canvas.delete(self.selection_rect)
             self.selection_rect = None
-        self.ui.update_controls()
+            self.ui.update_controls()
 
     def highlight_object(self, obj):
         """Đánh dấu đối tượng được chọn bằng khung đỏ"""
@@ -464,7 +479,8 @@ class CanvasEditorLogic:
             
             # Đặt selected_object về None
             self.selected_object = None
-            
+            # Remove from list
+            self.ui.update_object_list() 
             # Cập nhật giao diện
             self.ui.update_controls()
 
@@ -493,7 +509,7 @@ class CanvasEditorLogic:
             self.objects.append(new_obj)
             canvas_id = self.ui.canvas.create_image(new_obj["x"], new_obj["y"], image=new_obj["photo"], anchor="nw")
             new_obj["canvas_id"] = canvas_id
-            
+            self.ui.update_object_list()
             # Chọn đối tượng mới
             self.clear_selection()
             self.selected_object = new_obj
