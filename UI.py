@@ -21,9 +21,9 @@ class CanvasEditorUI:
         self.text_input.pack(side=tk.LEFT)
         tk.Button(self.general_toolbar, text="Add Text", command=self.logic.add_text).pack(side=tk.LEFT)
 
-        tk.Button(self.general_toolbar, text="Add Rectangle", command=self.logic.add_rectangle).pack(side=tk.LEFT)
+        #tk.Button(self.general_toolbar, text="Add Rectangle", command=self.logic.add_rectangle).pack(side=tk.LEFT)
 
-        tk.Button(self.general_toolbar, text="Apply Changes", command=self.logic.apply_changes).pack(side=tk.LEFT)
+        #tk.Button(self.general_toolbar, text="Apply Changes", command=self.logic.apply_changes).pack(side=tk.LEFT)
 
         # Text Toolbar
         self.text_toolbar = tk.Frame(root)

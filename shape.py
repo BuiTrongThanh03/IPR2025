@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 import numpy as np
 import math
+from tkinter import colorchooser
 
 class ShapeEditor:
     def __init__(self):
@@ -129,3 +130,85 @@ class ShapeEditor:
     def get_image(self):
         """Trả về hình ảnh Shape hiện tại"""
         return self.image
+
+class ShapeLogic:
+    def __init__(self, ui, canvas_logic):
+        self.ui = ui
+        self.canvas_logic = canvas_logic
+        self.shape_editor = ShapeEditor()
+
+    def update_shape_size(self, value=None):
+        """Cập nhật kích thước Shape từ cm sang pixel dựa trên thanh trượt"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "shape":
+            width_cm = self.ui.current_shape_width_cm.get()
+            height_cm = self.ui.current_shape_height_cm.get()
+            width_cm = max(1.0, width_cm)
+            height_cm = max(1.0, height_cm)
+            width_pixel = int(width_cm * self.ui.CM_TO_PIXEL)
+            height_pixel = int(height_cm * self.ui.CM_TO_PIXEL)
+            selected_obj["width_cm"] = width_cm
+            selected_obj["height_cm"] = height_cm
+            selected_obj["width"] = width_pixel
+            selected_obj["height"] = height_pixel
+            self.ui.max_radius = min(width_pixel, height_pixel) // 2
+            self.ui.shape_corner_scale.configure(to=self.ui.max_radius)
+            self.ui.shape_corner_label.config(text=f"Corner Radius: {int(self.ui.current_corner_radius.get())} (Max: {self.ui.max_radius})")
+            self.ui.shape_width_label.config(text=f"Width (cm): {width_cm:.1f}")
+            self.ui.shape_height_label.config(text=f"Height (cm): {height_cm:.1f}")
+            self.apply_shape_edits(selected_obj)
+
+    def pick_shape_border_color(self):
+        """Chọn màu viền Shape"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "shape":
+            color = colorchooser.askcolor(title="Choose Border Color")[1]
+            if color:
+                selected_obj["border_color"] = color
+                self.ui.border_color = color
+                self.apply_shape_edits(selected_obj)
+
+    def pick_shape_fill_color(self):
+        """Chọn màu nền Shape"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "shape":
+            color = colorchooser.askcolor(title="Choose Fill Color")[1]
+            if color:
+                selected_obj["fill_color"] = color
+                self.ui.fill_color = color
+                self.apply_shape_edits(selected_obj)
+
+    def update_shape_border_width(self, value=None):
+        """Cập nhật độ dày viền Shape"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "shape":
+            border_width = int(self.ui.current_border_width.get())
+            selected_obj["border_width"] = border_width
+            self.ui.shape_border_width_label.config(text=f"Border Width: {border_width}")
+            self.apply_shape_edits(selected_obj)
+
+    def update_shape_corner(self, value=None):
+        """Cập nhật bo góc Shape"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "shape":
+            radius = int(self.ui.current_corner_radius.get())
+            selected_obj["corner_radius"] = radius
+            self.ui.shape_corner_label.config(text=f"Corner Radius: {radius} (Max: {self.ui.max_radius})")
+            self.apply_shape_edits(selected_obj)
+
+    def apply_shape_edits(self, selected_obj):
+        """Áp dụng chỉnh sửa Shape"""
+        if selected_obj and selected_obj["type"] == "shape":
+            self.shape_editor.set_shape(
+                shape_type=selected_obj["shape_type"],
+                width=selected_obj["width"],
+                height=selected_obj["height"],
+                border_color=selected_obj["border_color"],
+                fill_color=selected_obj["fill_color"],
+                border_width=selected_obj["border_width"],
+                corner_radius=selected_obj["corner_radius"],
+                alpha=selected_obj["alpha"]
+            )
+            new_image = self.shape_editor.render_shape()
+            if new_image:
+                self.canvas_logic.update_object_image(selected_obj, new_image)

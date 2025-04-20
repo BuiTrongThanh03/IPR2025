@@ -2,6 +2,9 @@ from PIL import Image, ImageTk
 import uuid
 import tkinter as tk
 from tkinter import filedialog, ttk
+from image import ImageEditor
+from shape import ShapeEditor
+from text import TextEditor
 
 class CanvasEditorLogic:
     def __init__(self, ui):
@@ -30,9 +33,10 @@ class CanvasEditorLogic:
                 "border_width": 0,
                 "round": False,
                 "round_radius": 0,
-                "alpha": 1.0,
+                "alpha": 100,
                 "flip_h": False,
-                "flip_v": False
+                "flip_v": False,
+                 "locked": False  # Add locked property
             }
             self.objects.append(obj)
             canvas_id = self.ui.canvas.create_image(50, 50, image=obj["photo"], anchor="nw")
@@ -41,6 +45,49 @@ class CanvasEditorLogic:
             self.selected_object = obj
             self.highlight_object(obj)
             self.ui.update_controls()
+
+    def update_image_properties(self, obj, border_width=None, border_color=None, 
+                               round_radius=None, alpha=None, flip_h=None, flip_v=None):
+        """Cập nhật thuộc tính của đối tượng hình ảnh bằng ImageEditor"""
+        if obj["type"] == "image" and obj.get("original_image"):
+            # Cập nhật thuộc tính
+            if border_width is not None:
+                obj["border_width"] = border_width
+            if border_color is not None:
+                obj["border_color"] = border_color
+            if round_radius is not None:
+                obj["round_radius"] = round_radius
+                obj["round"] = round_radius > 0
+            if alpha is not None:
+                obj["alpha"] = alpha
+            if flip_h is not None:
+                obj["flip_h"] = flip_h
+            if flip_v is not None:
+                obj["flip_v"] = flip_v
+            
+            # Áp dụng các thay đổi
+            editor = ImageEditor()
+            editor.set_image(obj["original_image"].copy())
+            
+            # Áp dụng lật ngang/dọc trước khi áp dụng các hiệu ứng khác
+            if obj["flip_h"]:
+                editor.flip_horizontal()
+            if obj["flip_v"]:
+                editor.flip_vertical()
+            
+            # Áp dụng bo tròn góc
+            if obj["round"] and obj["round_radius"] > 0:
+                editor.round_corners(obj["round_radius"])
+            
+            # Áp dụng độ trong suốt
+            editor.set_transparency(obj["alpha"])
+            
+            # Áp dụng border
+            editor.add_border(obj["border_width"], obj["border_color"])
+            
+            # Cập nhật image
+            new_image = editor.get_image()
+            self.update_object_image(obj, new_image)
 
     def add_text(self):
         """Thêm văn bản vào canvas với loại được chọn"""
@@ -110,10 +157,12 @@ class CanvasEditorLogic:
                     "text": text,
                     "x": 50,
                     "y": 50,
+                    "locked": False,  # Add locked property
                     **defaults[type]
                 }
                 self.objects.append(obj)
-                from text import TextEditor
+                
+                # Sử dụng TextEditor để render text
                 editor = TextEditor()
                 editor.set_text(
                     text=obj["text"],
@@ -142,6 +191,54 @@ class CanvasEditorLogic:
 
         ttk.Button(dialog, text="OK", command=submit).pack(pady=10)
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
+
+    def update_text_properties(self, obj, text=None, font_name=None, font_size=None, 
+                              font_bold=None, font_italic=None, font_underline=None,
+                              text_color=None, stroke_width=None, stroke_color=None,
+                              alignment=None, alpha=None):
+        """Cập nhật thuộc tính của đối tượng văn bản bằng TextEditor"""
+        if obj["type"] == "text":
+            # Cập nhật thuộc tính nếu có
+            if text is not None:
+                obj["text"] = text
+            if font_name is not None:
+                obj["font_name"] = font_name
+            if font_size is not None:
+                obj["font_size"] = font_size
+            if font_bold is not None:
+                obj["font_bold"] = font_bold
+            if font_italic is not None:
+                obj["font_italic"] = font_italic
+            if font_underline is not None:
+                obj["font_underline"] = font_underline
+            if text_color is not None:
+                obj["text_color"] = text_color
+            if stroke_width is not None:
+                obj["stroke_width"] = stroke_width
+            if stroke_color is not None:
+                obj["stroke_color"] = stroke_color
+            if alignment is not None:
+                obj["alignment"] = alignment
+            if alpha is not None:
+                obj["alpha"] = alpha
+            
+            # Sử dụng TextEditor để render lại
+            editor = TextEditor()
+            editor.set_text(
+                text=obj["text"],
+                font_name=obj["font_name"],
+                font_size=obj["font_size"],
+                font_bold=obj["font_bold"],
+                font_italic=obj["font_italic"],
+                font_underline=obj["font_underline"],
+                text_color=obj["text_color"],
+                stroke_width=obj["stroke_width"],
+                stroke_color=obj["stroke_color"],
+                alignment=obj["alignment"],
+                alpha=obj["alpha"]
+            )
+            new_image = editor.render_text()
+            self.update_object_image(obj, new_image)
 
     def add_shape(self):
         """Thêm Shape vào canvas với loại được chọn"""
@@ -178,10 +275,12 @@ class CanvasEditorLogic:
                 "corner_radius": 0,
                 "alpha": 1.0,
                 "x": 50,
-                "y": 50
+                "y": 50,
+                "locked": False  # Add locked property
             }
             self.objects.append(obj)
-            from shape import ShapeEditor
+            
+            # Sử dụng ShapeEditor để render hình
             editor = ShapeEditor()
             editor.set_shape(
                 shape_type=obj["shape_type"],
@@ -207,6 +306,46 @@ class CanvasEditorLogic:
 
         ttk.Button(dialog, text="OK", command=submit).pack(pady=10)
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
+
+    def update_shape_properties(self, obj, shape_type=None, width=None, height=None,
+                               border_color=None, fill_color=None, border_width=None,
+                               corner_radius=None, alpha=None):
+        """Cập nhật thuộc tính của đối tượng hình dạng bằng ShapeEditor"""
+        if obj["type"] == "shape":
+            # Cập nhật thuộc tính nếu có
+            if shape_type is not None:
+                obj["shape_type"] = shape_type
+            if width is not None:
+                obj["width"] = width
+                obj["width_cm"] = width / 37.8  # Chuyển pixel sang cm
+            if height is not None:
+                obj["height"] = height
+                obj["height_cm"] = height / 37.8  # Chuyển pixel sang cm
+            if border_color is not None:
+                obj["border_color"] = border_color
+            if fill_color is not None:
+                obj["fill_color"] = fill_color
+            if border_width is not None:
+                obj["border_width"] = border_width
+            if corner_radius is not None:
+                obj["corner_radius"] = corner_radius
+            if alpha is not None:
+                obj["alpha"] = alpha
+            
+            # Sử dụng ShapeEditor để render lại
+            editor = ShapeEditor()
+            editor.set_shape(
+                shape_type=obj["shape_type"],
+                width=obj["width"],
+                height=obj["height"],
+                border_color=obj["border_color"],
+                fill_color=obj["fill_color"],
+                border_width=obj["border_width"],
+                corner_radius=obj["corner_radius"],
+                alpha=obj["alpha"]
+            )
+            new_image = editor.render_shape()
+            self.update_object_image(obj, new_image)
 
     def select_object(self, event):
         """Chọn một đối tượng tại tọa độ chuột"""
@@ -238,11 +377,14 @@ class CanvasEditorLogic:
             self.ui.canvas.delete(self.selection_rect)
         if obj["type"] in ["image", "text", "shape"] and obj.get("image"):
             x, y, w, h = obj["x"], obj["y"], obj["image"].width, obj["image"].height
-            self.selection_rect = self.ui.canvas.create_rectangle(x-2, y-2, x+w+2, y+h+2, outline="red", width=2)
+            # Sử dụng màu xanh lá cho đối tượng đã khóa, màu đỏ cho đối tượng thường
+            outline_color = "green" if obj.get("locked", False) else "red"
+            self.selection_rect = self.ui.canvas.create_rectangle(x-2, y-2, x+w+2, y+h+2, outline=outline_color, width=2)
 
     def drag_object(self, event):
         """Kéo đối tượng được chọn"""
-        if self.selected_object and self.start_x is not None and self.start_y is not None:
+        if (self.selected_object and self.start_x is not None and 
+        self.start_y is not None and not self.selected_object.get("locked", False)):
             dx = event.x - self.start_x
             dy = event.y - self.start_y
             self.selected_object["x"] += dx
@@ -254,7 +396,7 @@ class CanvasEditorLogic:
 
     def release_object(self, event):
         """Thả đối tượng sau khi kéo"""
-        pass
+        self.start_x, self.start_y = None, None
 
     def get_selected_object(self):
         """Trả về đối tượng được chọn"""
@@ -268,3 +410,82 @@ class CanvasEditorLogic:
             self.ui.canvas.itemconfig(obj["canvas_id"], image=obj["photo"])
             if self.selected_object == obj:
                 self.highlight_object(obj)
+
+    def lock_object(self):
+        """Khóa hoặc mở khóa đối tượng được chọn"""
+        if self.selected_object:
+            # Toggle the locked status
+            locked = self.selected_object.get("locked", False)
+            self.selected_object["locked"] = not locked
+            
+            # Highlight using different color if locked
+            if self.selection_rect:
+                self.ui.canvas.delete(self.selection_rect)
+            
+            if self.selected_object["locked"]:
+                # Use a different color (green) for locked objects
+                x, y = self.selected_object["x"], self.selected_object["y"]
+                w, h = self.selected_object["image"].width, self.selected_object["image"].height
+                self.selection_rect = self.ui.canvas.create_rectangle(x-2, y-2, x+w+2, y+h+2, outline="green", width=2)
+            else:
+                # Use normal color (red) for unlocked objects
+                self.highlight_object(self.selected_object)
+            
+            # Update controls in UI
+            self.ui.update_controls()
+
+    def delete_selected_object(self):
+        """Xóa đối tượng được chọn khỏi canvas"""
+        if self.selected_object:
+            # Check if object is locked before deleting
+            if self.selected_object.get("locked", False):
+                return  # Don't delete locked objects
+                
+            # Xóa đối tượng khỏi canvas
+            self.ui.canvas.delete(self.selected_object["canvas_id"])
+            
+            # Xóa khung chọn nếu có
+            if self.selection_rect:
+                self.ui.canvas.delete(self.selection_rect)
+                self.selection_rect = None
+                
+            # Xóa đối tượng khỏi danh sách
+            self.objects.remove(self.selected_object)
+            
+            # Đặt selected_object về None
+            self.selected_object = None
+            
+            # Cập nhật giao diện
+            self.ui.update_controls()
+
+    def duplicate_selected_object(self):
+        """Tạo bản sao của đối tượng được chọn"""
+        if self.selected_object:
+            # Check if object is locked before duplicating
+            if self.selected_object.get("locked", False):
+                return  # Don't duplicate locked objects
+                
+            obj = self.selected_object
+            new_obj = obj.copy()  # Tạo bản sao của đối tượng
+            new_obj["id"] = str(uuid.uuid4())  # ID mới
+            new_obj["x"] += 20  # Dịch chuyển một chút để phân biệt
+            new_obj["y"] += 20
+            new_obj["locked"] = False  # Ensure the new object is unlocked
+            
+            # Tạo bản sao của hình ảnh nếu có
+            if obj.get("image"):
+                if obj["type"] == "image":
+                    new_obj["original_image"] = obj["original_image"].copy()
+                new_obj["image"] = obj["image"].copy()
+                new_obj["photo"] = ImageTk.PhotoImage(new_obj["image"])
+            
+            # Thêm vào canvas
+            self.objects.append(new_obj)
+            canvas_id = self.ui.canvas.create_image(new_obj["x"], new_obj["y"], image=new_obj["photo"], anchor="nw")
+            new_obj["canvas_id"] = canvas_id
+            
+            # Chọn đối tượng mới
+            self.clear_selection()
+            self.selected_object = new_obj
+            self.highlight_object(new_obj)
+            self.ui.update_controls()

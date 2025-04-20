@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
+from tkinter import colorchooser
 
 class TextEditor:
     def __init__(self):
@@ -135,3 +136,89 @@ class TextEditor:
     def get_image(self):
         """Trả về hình ảnh văn bản hiện tại"""
         return self.image
+    
+class TextLogic:
+    def __init__(self, ui, canvas_logic):
+        self.ui = ui
+        self.canvas_logic = canvas_logic
+        self.text_editor = TextEditor()
+    def update_text_content(self, event=None):
+        """Cập nhật nội dung văn bản"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            new_text = self.ui.text_entry.get()
+            selected_obj["text"] = new_text or " "
+            self.apply_text_edits(selected_obj)
+    def update_font(self, event=None):
+        """Cập nhật phông chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            selected_obj["font_name"] = self.ui.font_combo.get()
+            self.apply_text_edits(selected_obj)
+    def update_font_size(self, value=None):
+        """Cập nhật kích thước chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            font_size = int(self.ui.current_font_size.get())
+            selected_obj["font_size"] = font_size
+            self.ui.font_size_label.config(text=f"Font Size: {font_size}")
+            self.apply_text_edits(selected_obj)
+    def update_font_style(self):
+        """Cập nhật kiểu chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            selected_obj["font_bold"] = self.ui.font_bold.get()
+            selected_obj["font_italic"] = self.ui.font_italic.get()
+            selected_obj["font_underline"] = self.ui.font_underline.get()
+            self.apply_text_edits(selected_obj)
+    def pick_text_color(self):
+        """Chọn màu chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            color = colorchooser.askcolor(title="Choose Text Color")[1]
+            if color:
+                selected_obj["text_color"] = color
+                self.ui.text_color = color
+                self.apply_text_edits(selected_obj)
+    def update_stroke_width(self, value=None):
+        """Cập nhật độ dày viền chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            stroke_width = int(self.ui.current_stroke_width.get())
+            selected_obj["stroke_width"] = stroke_width
+            self.ui.stroke_width_label.config(text=f"Stroke Width: {stroke_width}")
+            self.apply_text_edits(selected_obj)
+    def pick_stroke_color(self):
+        """Chọn màu viền chữ"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            color = colorchooser.askcolor(title="Choose Stroke Color")[1]
+            if color:
+                selected_obj["stroke_color"] = color
+                self.ui.stroke_color = color
+                self.apply_text_edits(selected_obj)
+    def update_alignment(self, event=None):
+        """Cập nhật căn chỉnh văn bản"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "text":
+            selected_obj["alignment"] = self.ui.align_combo.get()
+            self.apply_text_edits(selected_obj)
+    def apply_text_edits(self, selected_obj):
+        """Áp dụng chỉnh sửa văn bản"""
+        if selected_obj and selected_obj["type"] == "text":
+            self.text_editor.set_text(
+                text=selected_obj["text"],
+                font_name=selected_obj["font_name"],
+                font_size=selected_obj["font_size"],
+                font_bold=selected_obj["font_bold"],
+                font_italic=selected_obj["font_italic"],
+                font_underline=selected_obj["font_underline"],
+                text_color=selected_obj["text_color"],
+                stroke_width=selected_obj["stroke_width"],
+                stroke_color=selected_obj["stroke_color"],
+                alignment=selected_obj["alignment"],
+                alpha=selected_obj["alpha"]
+            )
+            new_image = self.text_editor.render_text()
+            if new_image:
+                self.canvas_logic.update_object_image(selected_obj, new_image)
