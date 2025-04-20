@@ -9,6 +9,8 @@ from image import ImageEditor, ImageLogic
 class EditorApp:
     def __init__(self, root, logic):
         self.root = root
+        self.menu_bar = tk.Menu(self.root)
+        self.root.config(menu=self.menu_bar)
         self.root.title("Text, Image, and Shape Editor")
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
@@ -45,6 +47,15 @@ class EditorApp:
         self.max_radius = 50
         self.DPI = 96
         self.CM_TO_PIXEL = self.DPI / 2.54
+
+        # Tạo menu "File"
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.file_menu.add_command(label="New", command=self.new_file)
+        self.file_menu.add_command(label="Open", command=self.open_project)
+        self.file_menu.add_command(label="Save", command=self.save_project)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Exit", command=self.root.quit)
 
         self.main_frame = ttk.Frame(self.root, padding="10")
         self.main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -502,7 +513,34 @@ class EditorApp:
             else:
                 self.image_logic.apply_image_edits(selected_obj)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = EditorApp(root)
-    root.mainloop()
+    def new_file(self):
+        # Logic để tạo file mới (ví dụ: xóa tất cả đối tượng trên canvas)
+        self.canvas_logic.objects.clear()
+        self.canvas_logic.clear_selection()
+        self.update_object_list()
+        self.update_controls()
+
+    def save_project(self):
+        """Mở hộp thoại để lưu file dự án"""
+        filename = filedialog.asksaveasfilename(
+            defaultextension=".edt",
+            filetypes=[("Editing File", "*.edt"), ("All files", "*.*")]
+        )
+        if filename:
+            success = self.canvas_logic.save_canvas(filename)
+            if success:
+                self.root.title(f"Text, Image, and Shape Editor - {filename}")
+            else:
+                tk.messagebox.showerror("Error", "Failed to save the project.")
+    
+    def open_project(self):
+        """Mở hộp thoại để mở file dự án"""
+        filename = filedialog.askopenfilename(
+            filetypes=[("Editing File", "*.edt"), ("All files", "*.*")]
+        )
+        if filename:
+            success = self.canvas_logic.load_canvas(filename)
+            if success:
+                self.root.title(f"Text, Image, and Shape Editor - {filename}")
+            else:
+                tk.messagebox.showerror("Error", "Failed to open the project.")

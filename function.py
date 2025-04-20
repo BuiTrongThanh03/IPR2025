@@ -1,10 +1,14 @@
 from PIL import Image, ImageTk
 import uuid
 import tkinter as tk
+import json
+import base64
+from io import BytesIO
 from tkinter import filedialog, ttk
 from image import ImageEditor
 from shape import ShapeEditor
 from text import TextEditor
+
 
 class CanvasEditorLogic:
     def __init__(self, ui):
@@ -571,3 +575,97 @@ class CanvasEditorLogic:
                     self.ui.canvas.tag_lower(self.selection_rect)
                 self.ui.update_object_list()
                 self.ui.update_controls()
+
+    def save_canvas(self, filename):
+        """Lưu tiến trình canvas vào file JSON"""
+        save_data = {
+            "objects": []
+        }
+        for obj in self.objects:
+            obj_data = obj.copy()  # Sao chép đối tượng
+            # Xử lý hình ảnh để lưu dưới dạng base64
+            try:
+                if obj["type"] == "image":
+                    if obj.get("original_image") and hasattr(obj["original_image"], "save"):
+                        buffered = BytesIO()
+                        obj["original_image"].save(buffered, format="PNG")
+                        obj_data["original_image"] = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                    if obj.get("image") and hasattr(obj["image"], "save"):
+                        buffered = BytesIO()
+                        obj["image"].save(buffered, format="PNG")
+                        obj_data["image"] = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                elif obj["type"] in ["text", "shape"]:
+                    if obj.get("image") and hasattr(obj["image"], "save"):
+                        buffered = BytesIO()
+                        obj["image"].save(buffered, format="PNG")
+                        obj_data["image"] = base64.b64encode(buffered.getvalue()).decode("utf-8")
+            except Exception as e:
+                print(f"Error encoding image for object {obj['id']}: {e}")
+                continue  # Bỏ qua đối tượng nếu có lỗi, hoặc xử lý theo cách khác
+            
+            # Xóa các trường không cần thiết hoặc không thể serialize
+            obj_data.pop("photo", None)  # PhotoImage không thể serialize
+            obj_data.pop("canvas_id", None)  # Canvas ID sẽ được tạo lại
+            save_data["objects"].append(obj_data)
+        
+        # Lưu vào file
+        try:
+            with open(filename, "w") as f:
+                json.dump(save_data, f, indent=4)
+            return True
+        except Exception as e:
+            print(f"Error saving file: {e}")
+            return False
+
+    def load_canvas(self, filename):
+        """Mở file JSON và khôi phục canvas"""
+        try:
+            with open(filename, "r") as f:
+                save_data = json.load(f)
+            
+            # Xóa canvas hiện tại
+            self.clear_canvas()
+            
+            # Tái tạo các đối tượng
+            for obj_data in save_data["objects"]:
+                obj = obj_data.copy()
+                try:
+                    # Khôi phục hình ảnh từ base64
+                    if obj["type"] == "image":
+                        if obj.get("original_image"):
+                            img_data = base64.b64decode(obj["original_image"])
+                            obj["original_image"] = Image.open(BytesIO(img_data))
+                        if obj.get("image"):
+                            img_data = base64.b64decode(obj["image"])
+                            obj["image"] = Image.open(BytesIO(img_data))
+                    elif obj["type"] in ["text", "shape"]:
+                        if obj.get("image"):
+                            img_data = base64.b64decode(obj["image"])
+                            obj["image"] = Image.open(BytesIO(img_data))
+                    
+                    # Tạo PhotoImage và thêm vào canvas
+                    if obj.get("image") and isinstance(obj["image"], Image.Image):
+                        obj["photo"] = ImageTk.PhotoImage(obj["image"])
+                        canvas_id = self.ui.canvas.create_image(obj["x"], obj["y"], image=obj["photo"], anchor="nw")
+                        obj["canvas_id"] = canvas_id
+                    
+                    self.objects.append(obj)
+                except Exception as e:
+                    print(f"Error loading object {obj.get('id', 'unknown')}: {e}")
+                    continue  # Bỏ qua đối tượng nếu có lỗi
+            
+            # Cập nhật danh sách đối tượng và giao diện
+            self.ui.update_object_list()
+            self.clear_selection()
+            self.ui.update_controls()
+            return True
+        except Exception as e:
+            print(f"Error loading file: {e}")
+            return False
+    
+    def clear_canvas(self):
+        """Xóa tất cả đối tượng trên canvas"""
+        for obj in self.objects:
+            self.ui.canvas.delete(obj["canvas_id"])
+        self.objects.clear()
+        self.clear_selection()
