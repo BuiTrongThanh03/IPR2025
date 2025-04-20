@@ -265,8 +265,8 @@ class CanvasEditorLogic:
                 "type": "shape",
                 "id": obj_id,
                 "shape_type": type,
-                "width": 189,  # 5 cm
-                "height": 189,  # 5 cm
+                "width": 100,  #px
+                "height": 100,  #px
                 "width_cm": 5.0,
                 "height_cm": 5.0,
                 "border_color": "black",
