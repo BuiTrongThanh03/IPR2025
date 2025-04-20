@@ -137,7 +137,7 @@ class ShapeLogic:
         self.canvas_logic = canvas_logic
         self.shape_editor = ShapeEditor()
 
-    def update_shape_size(self, value=None):
+    def update_shape_size(self):
         """Cập nhật kích thước Shape từ cm sang pixel dựa trên thanh trượt"""
         selected_obj = self.canvas_logic.get_selected_object()
         if selected_obj and selected_obj["type"] == "shape":

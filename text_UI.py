@@ -116,13 +116,16 @@ class EditorApp:
         # Shape controls
         self.shape_width_label = ttk.Label(self.edit_frame, text="Shape Width (cm):")
         self.shape_width_label.grid(row=9, column=0, sticky=tk.W, pady=2)
-        self.shape_width_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_width_cm, command=self.shape_logic.update_shape_size)
+        self.shape_width_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_width_cm, command=lambda value: self.shape_logic.update_shape_size())
         self.shape_width_scale.grid(row=9, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.shape_height_label = ttk.Label(self.edit_frame, text="Shape Height (cm):")
         self.shape_height_label.grid(row=10, column=0, sticky=tk.W, pady=2)
-        self.shape_height_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_height_cm, command=self.shape_logic.update_shape_size)
+        self.shape_height_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_height_cm, command=lambda value: self.shape_logic.update_shape_size())
         self.shape_height_scale.grid(row=10, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+
+        self.apply_size_button = ttk.Button(self.edit_frame, text="Apply Size", command=self.shape_logic.update_shape_size)
+        self.apply_size_button.grid(row=11, column=0, columnspan=3, pady=2)
 
         self.shape_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.shape_logic.pick_shape_border_color)
         self.shape_border_color_button.grid(row=12, column=0, columnspan=3, pady=2)
@@ -285,7 +288,6 @@ class EditorApp:
                 self.shape_width_scale.grid()
                 self.shape_height_label.grid()
                 self.shape_height_scale.grid()
-                self.apply_size_button.grid()
                 self.shape_border_color_button.grid()
                 self.shape_fill_color_button.grid()
                 self.shape_border_width_label.grid()

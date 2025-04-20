@@ -1,5 +1,4 @@
 import tkinter as tk
-from UI import CanvasEditorUI
 from function import CanvasEditorLogic
 from text_UI import EditorApp
 
