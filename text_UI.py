@@ -124,9 +124,6 @@ class EditorApp:
         self.shape_height_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_height_cm, command=self.shape_logic.update_shape_size)
         self.shape_height_scale.grid(row=10, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
-        self.apply_size_button = ttk.Button(self.edit_frame, text="Apply Size", command=self.shape_logic.update_shape_size)
-        self.apply_size_button.grid(row=11, column=0, columnspan=3, pady=2)
-
         self.shape_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.shape_logic.pick_shape_border_color)
         self.shape_border_color_button.grid(row=12, column=0, columnspan=3, pady=2)
 
