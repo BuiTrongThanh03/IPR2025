@@ -515,3 +515,59 @@ class CanvasEditorLogic:
             self.selected_object = new_obj
             self.highlight_object(new_obj)
             self.ui.update_controls()
+
+    def move_forward(self):
+        """Di chuyển đối tượng được chọn lên một lớp (forward)"""
+        if self.selected_object and not self.selected_object.get("locked", False):
+            idx = self.objects.index(self.selected_object)
+            if idx < len(self.objects) - 1:  # Không phải là đối tượng trên cùng
+                # Hoán đổi vị trí trong danh sách objects
+                self.objects[idx], self.objects[idx + 1] = self.objects[idx + 1], self.objects[idx]
+                # Nâng đối tượng lên trên canvas
+                self.ui.canvas.tag_raise(self.selected_object["canvas_id"])
+                if self.selection_rect:
+                    self.ui.canvas.tag_raise(self.selection_rect)
+                self.ui.update_object_list()
+                self.ui.update_controls()
+
+    def move_backward(self):
+        """Di chuyển đối tượng được chọn xuống một lớp (backward)"""
+        if self.selected_object and not self.selected_object.get("locked", False):
+            idx = self.objects.index(self.selected_object)
+            if idx > 0:  # Không phải là đối tượng dưới cùng
+                # Hoán đổi vị trí trong danh sách objects
+                self.objects[idx], self.objects[idx - 1] = self.objects[idx - 1], self.objects[idx]
+                # Hạ đối tượng xuống dưới canvas
+                self.ui.canvas.tag_lower(self.selected_object["canvas_id"])
+                if self.selection_rect:
+                    self.ui.canvas.tag_lower(self.selection_rect)
+                self.ui.update_object_list()
+                self.ui.update_controls()
+
+    def move_to_front(self):
+        """Di chuyển đối tượng được chọn lên lớp trên cùng (to front)"""
+        if self.selected_object and not self.selected_object.get("locked", False):
+            idx = self.objects.index(self.selected_object)
+            if idx < len(self.objects) - 1:  # Không phải là đối tượng trên cùng
+                # Di chuyển đối tượng lên cuối danh sách objects
+                self.objects.append(self.objects.pop(idx))
+                # Nâng đối tượng lên trên cùng canvas
+                self.ui.canvas.tag_raise(self.selected_object["canvas_id"])
+                if self.selection_rect:
+                    self.ui.canvas.tag_raise(self.selection_rect)
+                self.ui.update_object_list()
+                self.ui.update_controls()
+
+    def move_to_back(self):
+        """Di chuyển đối tượng được chọn xuống lớp dưới cùng (to back)"""
+        if self.selected_object and not self.selected_object.get("locked", False):
+            idx = self.objects.index(self.selected_object)
+            if idx > 0:  # Không phải là đối tượng dưới cùng
+                # Di chuyển đối tượng xuống đầu danh sách objects
+                self.objects.insert(0, self.objects.pop(idx))
+                # Hạ đối tượng xuống dưới cùng canvas
+                self.ui.canvas.tag_lower(self.selected_object["canvas_id"])
+                if self.selection_rect:
+                    self.ui.canvas.tag_lower(self.selection_rect)
+                self.ui.update_object_list()
+                self.ui.update_controls()

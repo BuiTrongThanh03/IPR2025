@@ -92,6 +92,8 @@ class EditorApp:
         self.manipulation_frame.grid_columnconfigure(0, weight=1)
         self.manipulation_frame.grid_columnconfigure(1, weight=1)
         self.manipulation_frame.grid_columnconfigure(2, weight=1)
+        self.manipulation_frame.grid_columnconfigure(3, weight=1)
+        self.manipulation_frame.grid_columnconfigure(4, weight=1)
 
         self.duplicate_button = ttk.Button(self.manipulation_frame, text="Duplicate", command=self.canvas_logic.duplicate_selected_object, state=tk.DISABLED)
         self.duplicate_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
@@ -101,6 +103,18 @@ class EditorApp:
 
         self.lock_button = ttk.Button(self.manipulation_frame, text="Lock/Unlock", command=self.canvas_logic.lock_object)
         self.lock_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
+
+        self.forward_button = ttk.Button(self.manipulation_frame, text="Forward", command=self.canvas_logic.move_forward, state=tk.DISABLED)
+        self.forward_button.grid(row=0, column=3, padx=5, pady=5, sticky=(tk.W, tk.E))
+
+        self.backward_button = ttk.Button(self.manipulation_frame, text="Backward", command=self.canvas_logic.move_backward, state=tk.DISABLED)
+        self.backward_button.grid(row=0, column=4, padx=5, pady=5, sticky=(tk.W, tk.E))
+
+        self.to_front_button = ttk.Button(self.manipulation_frame, text="To Front", command=self.canvas_logic.move_to_front, state=tk.DISABLED)
+        self.to_front_button.grid(row=1, column=3, padx=5, pady=5, sticky=(tk.W, tk.E))
+
+        self.to_back_button = ttk.Button(self.manipulation_frame, text="To Back", command=self.canvas_logic.move_to_back, state=tk.DISABLED)
+        self.to_back_button.grid(row=1, column=4, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.edit_frame = ttk.LabelFrame(self.main_frame, text="Edit Properties", padding="5")
         self.edit_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), padx=5, pady=5)
@@ -299,14 +313,26 @@ class EditorApp:
             if is_locked:
                 self.duplicate_button.config(state=tk.DISABLED)
                 self.delete_button.config(state=tk.DISABLED)
+                self.forward_button.config(state=tk.DISABLED)
+                self.backward_button.config(state=tk.DISABLED)
+                self.to_front_button.config(state=tk.DISABLED)
+                self.to_back_button.config(state=tk.DISABLED)
             else:
                 self.duplicate_button.config(state=tk.NORMAL)
                 self.delete_button.config(state=tk.NORMAL)
+                self.forward_button.config(state=tk.NORMAL)
+                self.backward_button.config(state=tk.NORMAL)
+                self.to_front_button.config(state=tk.NORMAL)
+                self.to_back_button.config(state=tk.NORMAL)
         else:
             self.duplicate_button.config(state=tk.DISABLED)
             self.delete_button.config(state=tk.DISABLED)
             self.lock_button.config(state=tk.DISABLED)
             self.lock_button.config(text="Lock/Unlock")
+            self.forward_button.config(state=tk.DISABLED)
+            self.backward_button.config(state=tk.DISABLED)
+            self.to_front_button.config(state=tk.DISABLED)
+            self.to_back_button.config(state=tk.DISABLED)
 
         if selected_obj:
             is_locked = selected_obj.get("locked", False)
