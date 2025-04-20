@@ -29,14 +29,16 @@ class CanvasEditorLogic:
                 "photo": ImageTk.PhotoImage(img),
                 "x": 50,
                 "y": 50,
+                "width": img.size[0],  # Store initial width
+                "height": img.size[1],  # Store initial height
                 "border_color": "blue",
                 "border_width": 0,
                 "round": False,
                 "round_radius": 0,
-                "alpha": 100,
+                "alpha": 1.0,
                 "flip_h": False,
                 "flip_v": False,
-                 "locked": False  # Add locked property
+                "locked": False
             }
             self.objects.append(obj)
             canvas_id = self.ui.canvas.create_image(50, 50, image=obj["photo"], anchor="nw")
@@ -47,7 +49,8 @@ class CanvasEditorLogic:
             self.ui.update_controls()
 
     def update_image_properties(self, obj, border_width=None, border_color=None, 
-                               round_radius=None, alpha=None, flip_h=None, flip_v=None):
+                               round_radius=None, alpha=None, flip_h=None, flip_v=None,
+                               width=None, height=None):
         """Cập nhật thuộc tính của đối tượng hình ảnh bằng ImageEditor"""
         if obj["type"] == "image" and obj.get("original_image"):
             # Cập nhật thuộc tính
@@ -64,12 +67,19 @@ class CanvasEditorLogic:
                 obj["flip_h"] = flip_h
             if flip_v is not None:
                 obj["flip_v"] = flip_v
+            if width is not None:
+                obj["width"] = width
+            if height is not None:
+                obj["height"] = height
             
             # Áp dụng các thay đổi
             editor = ImageEditor()
             editor.set_image(obj["original_image"].copy())
             
-            # Áp dụng lật ngang/dọc trước khi áp dụng các hiệu ứng khác
+            # Resize image first
+            editor.resize_image(obj["width"], obj["height"])
+            
+            # Áp dụng lật ngang/dọc
             if obj["flip_h"]:
                 editor.flip_horizontal()
             if obj["flip_v"]:
@@ -157,7 +167,7 @@ class CanvasEditorLogic:
                     "text": text,
                     "x": 50,
                     "y": 50,
-                    "locked": False,  # Add locked property
+                    "locked": False,
                     **defaults[type]
                 }
                 self.objects.append(obj)
@@ -276,7 +286,7 @@ class CanvasEditorLogic:
                 "alpha": 1.0,
                 "x": 50,
                 "y": 50,
-                "locked": False  # Add locked property
+                "locked": False
             }
             self.objects.append(obj)
             
@@ -384,7 +394,7 @@ class CanvasEditorLogic:
     def drag_object(self, event):
         """Kéo đối tượng được chọn"""
         if (self.selected_object and self.start_x is not None and 
-        self.start_y is not None and not self.selected_object.get("locked", False)):
+            self.start_y is not None and not self.selected_object.get("locked", False)):
             dx = event.x - self.start_x
             dy = event.y - self.start_y
             self.selected_object["x"] += dx
@@ -416,7 +426,7 @@ class CanvasEditorLogic:
         if self.selected_object:
             # Toggle the locked status
             locked = self.selected_object.get("locked", False)
-            self.selected_object["locked"] = not locked
+            self.selected_object["locked"] = not-locked
             
             # Highlight using different color if locked
             if self.selection_rect:

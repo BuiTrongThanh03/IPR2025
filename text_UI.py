@@ -21,6 +21,8 @@ class EditorApp:
         self.current_border_width = tk.DoubleVar(value=0)
         self.current_shape_width_cm = tk.DoubleVar(value="5.0")
         self.current_shape_height_cm = tk.DoubleVar(value="5.0")
+        self.current_image_width = tk.DoubleVar(value=100)  # New variable for image width
+        self.current_image_height = tk.DoubleVar(value=100)  # New variable for image height
         self.font_bold = tk.BooleanVar(value=False)
         self.font_italic = tk.BooleanVar(value=False)
         self.font_underline = tk.BooleanVar(value=False)
@@ -49,7 +51,6 @@ class EditorApp:
         self.add_shape_button.grid(row=0, column=2, padx=5)
 
         # Buttons for object manipulation
-
         self.manipulation_frame = ttk.Frame(self.main_frame)
         self.manipulation_frame.grid(row=1, column=3, pady=5)
 
@@ -144,23 +145,33 @@ class EditorApp:
         self.shape_corner_scale.grid(row=15, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         # Image controls
+        self.image_width_label = ttk.Label(self.edit_frame, text="Image Width (px):")  # New label
+        self.image_width_label.grid(row=16, column=0, sticky=tk.W, pady=2)
+        self.image_width_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_width, command=self.image_logic.update_image_size)
+        self.image_width_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+
+        self.image_height_label = ttk.Label(self.edit_frame, text="Image Height (px):")  # New label
+        self.image_height_label.grid(row=17, column=0, sticky=tk.W, pady=2)
+        self.image_height_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_height, command=self.image_logic.update_image_size)
+        self.image_height_scale.grid(row=17, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+
         self.image_corner_label = ttk.Label(self.edit_frame, text="Corner Radius: 0")
-        self.image_corner_label.grid(row=16, column=0, sticky=tk.W, pady=2)
+        self.image_corner_label.grid(row=18, column=0, sticky=tk.W, pady=2)
         self.image_corner_scale = ttk.Scale(self.edit_frame, from_=0, to=self.max_radius, orient=tk.HORIZONTAL, variable=self.current_corner_radius, command=self.image_logic.update_image_corner)
-        self.image_corner_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_corner_scale.grid(row=18, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_border_width_label = ttk.Label(self.edit_frame, text="Border Width: 0")
-        self.image_border_width_label.grid(row=17, column=0, sticky=tk.W, pady=2)
+        self.image_border_width_label.grid(row=19, column=0, sticky=tk.W, pady=2)
         self.image_border_width_scale = ttk.Scale(self.edit_frame, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.current_border_width, command=self.image_logic.update_image_border_width)
-        self.image_border_width_scale.grid(row=17, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_border_width_scale.grid(row=19, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.image_logic.pick_image_border_color)
-        self.image_border_color_button.grid(row=18, column=0, columnspan=3, pady=2)
+        self.image_border_color_button.grid(row=20, column=0, columnspan=3, pady=2)
 
         self.flip_h_button = ttk.Button(self.edit_frame, text="Flip Horizontal", command=self.image_logic.flip_horizontal)
-        self.flip_h_button.grid(row=19, column=0, pady=2)
+        self.flip_h_button.grid(row=21, column=0, pady=2)
         self.flip_v_button = ttk.Button(self.edit_frame, text="Flip Vertical", command=self.image_logic.flip_vertical)
-        self.flip_v_button.grid(row=19, column=1, pady=2)
+        self.flip_v_button.grid(row=21, column=1, pady=2)
 
         self.canvas.bind("<Button-1>", self.canvas_logic.select_object)
         self.canvas.bind("<B1-Motion>", self.canvas_logic.drag_object)
@@ -324,15 +335,23 @@ class EditorApp:
                 self.current_transparency.set(selected_obj.get("alpha", 1.0) * 255)
                 self.current_corner_radius.set(selected_obj.get("round_radius", 0))
                 self.current_border_width.set(selected_obj.get("border_width", 0))
+                self.current_image_width.set(selected_obj.get("width", selected_obj["image"].size[0]))
+                self.current_image_height.set(selected_obj.get("height", selected_obj["image"].size[1]))
                 self.border_color = selected_obj.get("border_color", "blue")
                 self.transparency_label.config(text=f"Transparency: {int(self.current_transparency.get())}")
                 self.max_radius = min(selected_obj["image"].size[0], selected_obj["image"].size[1]) // 2
                 self.image_corner_scale.configure(to=self.max_radius)
                 self.image_corner_label.config(text=f"Corner Radius: {int(self.current_corner_radius.get())} (Max: {self.max_radius})")
                 self.image_border_width_label.config(text=f"Border Width: {int(self.current_border_width.get())}")
-                 # Show image controls
+                self.image_width_label.config(text=f"Image Width (px): {int(self.current_image_width.get())}")
+                self.image_height_label.config(text=f"Image Height (px): {int(self.current_image_height.get())}")
+                # Show image controls
                 self.transparency_label.grid()
                 self.transparency_scale.grid()
+                self.image_width_label.grid()
+                self.image_width_scale.grid()
+                self.image_height_label.grid()
+                self.image_height_scale.grid()
                 self.image_corner_label.grid()
                 self.image_corner_scale.grid()
                 self.image_border_width_label.grid()
@@ -343,6 +362,8 @@ class EditorApp:
                 # Set control state based on lock status
                 if is_locked:
                     self.transparency_scale.config(state=tk.DISABLED)
+                    self.image_width_scale.config(state=tk.DISABLED)
+                    self.image_height_scale.config(state=tk.DISABLED)
                     self.image_corner_scale.config(state=tk.DISABLED)
                     self.image_border_width_scale.config(state=tk.DISABLED)
                     self.image_border_color_button.config(state=tk.DISABLED)
@@ -350,6 +371,8 @@ class EditorApp:
                     self.flip_v_button.config(state=tk.DISABLED)
                 else:
                     self.transparency_scale.config(state=tk.NORMAL)
+                    self.image_width_scale.config(state=tk.NORMAL)
+                    self.image_height_scale.config(state=tk.NORMAL)
                     self.image_corner_scale.config(state=tk.NORMAL)
                     self.image_border_width_scale.config(state=tk.NORMAL)
                     self.image_border_color_button.config(state=tk.NORMAL)

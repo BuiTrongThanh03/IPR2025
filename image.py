@@ -11,6 +11,12 @@ class ImageEditor:
         """Gán hình ảnh để chỉnh sửa"""
         self.image = image.copy()
 
+    def resize_image(self, width, height):
+        """Thay đổi kích thước ảnh"""
+        if self.image:
+            self.image = self.image.resize((int(width), int(height)), Image.Resampling.LANCZOS)
+        return self
+
     def add_border(self, border_width, border_color):
         """Thêm viền cho hình ảnh nếu border_width > 0"""
         if self.image and border_width > 0:
@@ -66,6 +72,19 @@ class ImageLogic:
         self.ui = ui
         self.canvas_logic = canvas_logic
         self.image_editor = ImageEditor()
+
+    def update_image_size(self, value=None):
+        """Cập nhật kích thước ảnh"""
+        selected_obj = self.canvas_logic.get_selected_object()
+        if selected_obj and selected_obj["type"] == "image":
+            width = int(self.ui.current_image_width.get())
+            height = int(self.ui.current_image_height.get())
+            selected_obj["width"] = width
+            selected_obj["height"] = height
+            self.ui.image_width_label.config(text=f"Image Width (px): {width}")
+            self.ui.image_height_label.config(text=f"Image Height (px): {height}")
+            self.apply_image_edits(selected_obj)
+
     def update_image_corner(self, value=None):
         """Cập nhật bo góc ảnh"""
         selected_obj = self.canvas_logic.get_selected_object()
@@ -75,6 +94,7 @@ class ImageLogic:
             selected_obj["round_radius"] = radius
             self.ui.image_corner_label.config(text=f"Corner Radius: {radius} (Max: {self.ui.max_radius})")
             self.apply_image_edits(selected_obj)
+
     def update_image_border_width(self, value=None):
         """Cập nhật kích thước viền ảnh"""
         selected_obj = self.canvas_logic.get_selected_object()
@@ -83,6 +103,7 @@ class ImageLogic:
             selected_obj["border_width"] = border_width
             self.ui.image_border_width_label.config(text=f"Border Width: {border_width}")
             self.apply_image_edits(selected_obj)
+
     def pick_image_border_color(self):
         """Chọn màu viền ảnh"""
         selected_obj = self.canvas_logic.get_selected_object()
@@ -92,22 +113,27 @@ class ImageLogic:
                 selected_obj["border_color"] = color
                 self.ui.border_color = color
                 self.apply_image_edits(selected_obj)
+
     def flip_horizontal(self):
         """Lật ngang ảnh"""
         selected_obj = self.canvas_logic.get_selected_object()
         if selected_obj and selected_obj["type"] == "image":
             selected_obj["flip_h"] = not selected_obj["flip_h"]
             self.apply_image_edits(selected_obj)
+
     def flip_vertical(self):
         """Lật dọc ảnh"""
         selected_obj = self.canvas_logic.get_selected_object()
         if selected_obj and selected_obj["type"] == "image":
             selected_obj["flip_v"] = not selected_obj["flip_v"]
             self.apply_image_edits(selected_obj)
+
     def apply_image_edits(self, selected_obj):
         """Áp dụng chỉnh sửa ảnh"""
         if selected_obj and selected_obj["type"] == "image":
             self.image_editor.set_image(selected_obj["original_image"])
+            # Resize image first
+            self.image_editor.resize_image(selected_obj["width"], selected_obj["height"])
             if selected_obj["flip_h"]:
                 self.image_editor.flip_horizontal()
             if selected_obj["flip_v"]:
