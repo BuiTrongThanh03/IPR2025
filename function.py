@@ -526,11 +526,17 @@ class CanvasEditorLogic:
             idx = self.objects.index(self.selected_object)
             if idx < len(self.objects) - 1:  # Không phải là đối tượng trên cùng
                 # Hoán đổi vị trí trong danh sách objects
+                next_object = self.objects[idx + 1]
                 self.objects[idx], self.objects[idx + 1] = self.objects[idx + 1], self.objects[idx]
-                # Nâng đối tượng lên trên canvas
-                self.ui.canvas.tag_raise(self.selected_object["canvas_id"])
-                if self.selection_rect:
-                    self.ui.canvas.tag_raise(self.selection_rect)
+                # Sắp xếp lại trên canvas theo thứ tự chính xác
+                canvas = self.ui.canvas
+                # Đặt đối tượng ở trên một cách tường minh
+                canvas.tag_raise(self.selected_object["canvas_id"], next_object["canvas_id"])
+                # Debug để kiểm tra thứ tự hiện tại
+                print("Current object order after move_forward:")
+                for i, obj in enumerate(self.objects):
+                    print(f"{i+1}. {obj.get('type', 'Unknown')} - {obj.get('fill_color', 'No color')}")
+                # Cập nhật giao diện
                 self.ui.update_object_list()
                 self.ui.update_controls()
 
@@ -540,11 +546,18 @@ class CanvasEditorLogic:
             idx = self.objects.index(self.selected_object)
             if idx > 0:  # Không phải là đối tượng dưới cùng
                 # Hoán đổi vị trí trong danh sách objects
+                prev_object = self.objects[idx - 1]
                 self.objects[idx], self.objects[idx - 1] = self.objects[idx - 1], self.objects[idx]
-                # Hạ đối tượng xuống dưới canvas
-                self.ui.canvas.tag_lower(self.selected_object["canvas_id"])
-                if self.selection_rect:
-                    self.ui.canvas.tag_lower(self.selection_rect)
+                # Sắp xếp lại trên canvas theo thứ tự chính xác
+                # Lấy ra đối tượng ở vị trí trước và sau của selected_object trong danh sách mới
+                canvas = self.ui.canvas
+                # Đặt đối tượng ở dưới một cách tường minh
+                canvas.tag_lower(self.selected_object["canvas_id"], prev_object["canvas_id"])
+                # Debug để kiểm tra thứ tự hiện tại
+                print("Current object order after move_backward:")
+                for i, obj in enumerate(self.objects):
+                    print(f"{i+1}. {obj.get('type', 'Unknown')} - {obj.get('fill_color', 'No color')}")
+                # Cập nhật giao diện
                 self.ui.update_object_list()
                 self.ui.update_controls()
 
