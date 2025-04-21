@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShape(QtWidgets.QFrame.Shape.Box)
         self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
         self.frame.setLineWidth(2)
-        self.frame.setStyleSheet("background-color: #FFFFFF;")  # Background to white
+        self.frame.setStyleSheet("background-color: #FFFFFF;")
         self.frame.setObjectName("frame")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
         self.label_2 = QtWidgets.QLabel(parent=self.frame)
@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: #000000;")  # Text color to black
+        self.label_2.setStyleSheet("color: #000000;")
         self.label_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout.addWidget(self.label_2)
@@ -44,14 +44,14 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShape(QtWidgets.QFrame.Shape.Box)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
         self.frame_2.setLineWidth(2)
-        self.frame_2.setStyleSheet("background-color: #FFFFFF;")  # Background to white
+        self.frame_2.setStyleSheet("background-color: #FFFFFF;")
         self.frame_2.setObjectName("frame_2")
         self.header_label = QtWidgets.QLabel(parent=self.frame_2)
         self.header_label.setGeometry(QtCore.QRect(0, 0, 1050, 80))
         font = QtGui.QFont()
         font.setPointSize(20)
         self.header_label.setFont(font)
-        self.header_label.setStyleSheet("color: #000000;")  # Text color to black
+        self.header_label.setStyleSheet("color: #000000;")
         self.header_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.header_label.setObjectName("header_label")
 
@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.stackedWidget = QtWidgets.QStackedWidget(parent=self.scrollAreaWidgetContents)
         self.stackedWidget.setGeometry(QtCore.QRect(0, 0, 1050, 620))
-        self.stackedWidget.setStyleSheet("background-color: #FFFFFF;")  # Background to white
+        self.stackedWidget.setStyleSheet("background-color: #FFFFFF;")
         self.stackedWidget.setObjectName("stackedWidget")
 
         # Page 1: New template
@@ -72,7 +72,7 @@ class Ui_MainWindow(object):
         self.page.setObjectName("page")
         self.New_template = QtWidgets.QGroupBox(parent=self.page)
         self.New_template.setGeometry(QtCore.QRect(7, 0, 1036, 620))
-        self.New_template.setStyleSheet("background-color: #FFFFFF; color: #000000;")  # Background to white, text to black
+        self.New_template.setStyleSheet("background-color: #FFFFFF; color: #000000;")
         self.New_template.setObjectName("New_template")
 
         # Header bar
@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
         self.headerBar = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.headerBar.setContentsMargins(0, 0, 0, 0)
         self.ImageName = QtWidgets.QLineEdit(parent=self.horizontalLayoutWidget)
-        self.ImageName.setStyleSheet("color: #000000;")  # Text color to black
+        self.ImageName.setStyleSheet("color: #000000;")
         self.ImageName.setObjectName("ImageName")
         self.headerBar.addWidget(self.ImageName)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.btnUpload.setObjectName("btnUpload")
         self.btnUpload.setToolTip("Upload a background image")
         self.headerBar.addWidget(self.btnUpload)
@@ -112,7 +112,7 @@ class Ui_MainWindow(object):
         self.widgetPreview.setObjectName("widgetPreview")
         self.labelPreview = QtWidgets.QLabel(parent=self.widgetPreview)
         self.labelPreview.setGeometry(QtCore.QRect(10, 10, 796, 380))
-        self.labelPreview.setStyleSheet("color: #000000;")  # Text color to black
+        self.labelPreview.setStyleSheet("color: #000000;")
         self.labelPreview.setObjectName("labelPreview")
         self.labelPreview.setScaledContents(False)
         self.labelPreview.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -130,17 +130,17 @@ class Ui_MainWindow(object):
             QTabWidget::pane { 
                 border: 1px solid #D1D5DB; 
                 top: -1px; 
-                background-color: #FFFFFF;  /* Background to white */
+                background-color: #FFFFFF;
             }
             QTabBar::tab { 
                 background: #E5E7EB; 
-                color: #000000;  /* Text to black */
+                color: #000000;
                 padding: 8px; 
                 margin-right: 2px; 
             }
             QTabBar::tab:selected { 
-                background: #FFFFFF;  /* Background to white */
-                color: #000000;  /* Text to black */
+                background: #FFFFFF;
+                color: #000000;
                 border-bottom: none; 
             }
         """)
@@ -152,25 +152,25 @@ class Ui_MainWindow(object):
         self.headerTabLayout.setFormAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.headerTabLayout.setFieldGrowthPolicy(QtWidgets.QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         self.HeaderEdit = QtWidgets.QLineEdit(parent=self.headerTab)
-        self.HeaderEdit.setStyleSheet("color: #000000;")  # Text color to black
+        self.HeaderEdit.setStyleSheet("color: #000000;")
         self.HeaderEdit.setPlaceholderText("Enter header text")
         self.headerTabLayout.addRow("Text:", self.HeaderEdit)
         self.headerXSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
-        self.headerXSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.headerXSpinBox.setStyleSheet("color: #000000;")
         self.headerXSpinBox.setRange(0, 800)
         self.headerXSpinBox.setValue(0)
         self.headerTabLayout.addRow("X:", self.headerXSpinBox)
         self.headerYSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
-        self.headerYSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.headerYSpinBox.setStyleSheet("color: #000000;")
         self.headerYSpinBox.setRange(0, 600)
         self.headerYSpinBox.setValue(120)
         self.headerTabLayout.addRow("Y:", self.headerYSpinBox)
         self.headerFontCombo = QtWidgets.QComboBox(parent=self.headerTab)
-        self.headerFontCombo.setStyleSheet("color: #000000;")  # Text color to black
+        self.headerFontCombo.setStyleSheet("color: #000000;")
         self.headerFontCombo.addItems(["Arial", "Times New Roman", "Calibri", "Helvetica", "Comic Sans MS"])
         self.headerTabLayout.addRow("Font:", self.headerFontCombo)
         self.headerSizeSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
-        self.headerSizeSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.headerSizeSpinBox.setStyleSheet("color: #000000;")
         self.headerSizeSpinBox.setRange(8, 72)
         self.headerSizeSpinBox.setValue(36)
         self.headerTabLayout.addRow("Size:", self.headerSizeSpinBox)
@@ -186,7 +186,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.headerTabLayout.addRow("Color:", self.headerColorButton)
         self.btnApplyHeader = QtWidgets.QPushButton(parent=self.headerTab)
         self.btnApplyHeader.setText("Apply Header")
@@ -200,7 +200,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.headerTabLayout.addRow(self.btnApplyHeader)
         self.tabWidget.addTab(self.headerTab, "Header")
 
@@ -211,25 +211,25 @@ class Ui_MainWindow(object):
         self.footerTabLayout.setFormAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.footerTabLayout.setFieldGrowthPolicy(QtWidgets.QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         self.FooterEdit = QtWidgets.QLineEdit(parent=self.footerTab)
-        self.FooterEdit.setStyleSheet("color: #000000;")  # Text color to black
+        self.FooterEdit.setStyleSheet("color: #000000;")
         self.FooterEdit.setPlaceholderText("Enter footer text")
         self.footerTabLayout.addRow("Text:", self.FooterEdit)
         self.footerXSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
-        self.footerXSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.footerXSpinBox.setStyleSheet("color: #000000;")
         self.footerXSpinBox.setRange(0, 800)
         self.footerXSpinBox.setValue(0)
         self.footerTabLayout.addRow("X:", self.footerXSpinBox)
         self.footerYSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
-        self.footerYSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.footerYSpinBox.setStyleSheet("color: #000000;")
         self.footerYSpinBox.setRange(0, 600)
         self.footerYSpinBox.setValue(550)
         self.footerTabLayout.addRow("Y:", self.footerYSpinBox)
         self.footerFontCombo = QtWidgets.QComboBox(parent=self.footerTab)
-        self.footerFontCombo.setStyleSheet("color: #000000;")  # Text color to black
+        self.footerFontCombo.setStyleSheet("color: #000000;")
         self.footerFontCombo.addItems(["Arial", "Times New Roman", "Calibri", "Helvetica", "Comic Sans MS"])
         self.footerTabLayout.addRow("Font:", self.footerFontCombo)
         self.footerSizeSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
-        self.footerSizeSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.footerSizeSpinBox.setStyleSheet("color: #000000;")
         self.footerSizeSpinBox.setRange(8, 72)
         self.footerSizeSpinBox.setValue(36)
         self.footerTabLayout.addRow("Size:", self.footerSizeSpinBox)
@@ -245,7 +245,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.footerTabLayout.addRow("Color:", self.footerColorButton)
         self.btnApplyFooter = QtWidgets.QPushButton(parent=self.footerTab)
         self.btnApplyFooter.setText("Apply Footer")
@@ -259,7 +259,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.footerTabLayout.addRow(self.btnApplyFooter)
         self.tabWidget.addTab(self.footerTab, "Footer")
 
@@ -281,15 +281,15 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.logoTabLayout.addRow(self.btnUploadLogo)
         self.logoXSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
-        self.logoXSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.logoXSpinBox.setStyleSheet("color: #000000;")
         self.logoXSpinBox.setRange(0, 800)
         self.logoXSpinBox.setValue(10)
         self.logoTabLayout.addRow("X:", self.logoXSpinBox)
         self.logoYSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
-        self.logoYSpinBox.setStyleSheet("color: #000000;")  # Text color to black
+        self.logoYSpinBox.setStyleSheet("color: #000000;")
         self.logoYSpinBox.setRange(0, 600)
         self.logoYSpinBox.setValue(10)
         self.logoTabLayout.addRow("Y:", self.logoYSpinBox)
@@ -305,7 +305,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.logoTabLayout.addRow(self.btnApplyLogo)
         self.tabWidget.addTab(self.logoTab, "Logo")
 
@@ -328,7 +328,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #9CA3AF; 
-            }""")  # Keep button text white
+            }""")
         self.btnRotate.setObjectName("btnRotate")
         self.btnRotate.setToolTip("Rotate image 90° clockwise (Ctrl+R)")
         self.toolbarLayout.addWidget(self.btnRotate)
@@ -342,7 +342,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #9CA3AF; 
-            }""")  # Keep button text white
+            }""")
         self.btnCrop.setObjectName("btnCrop")
         self.btnCrop.setToolTip("Crop image by dragging (Ctrl+C)")
         self.toolbarLayout.addWidget(self.btnCrop)
@@ -356,7 +356,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
-            }""")  # Keep button text white
+            }""")
         self.btnSave.setObjectName("btnSave")
         self.btnSave.setToolTip("Save template (Ctrl+S)")
         self.toolbarLayout.addWidget(self.btnSave)
@@ -370,7 +370,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #F08080; 
-            }""")  # Keep button text white
+            }""")
         self.btnDelete.setObjectName("btnDelete")
         self.btnDelete.setToolTip("Delete template (Ctrl+D)")
         self.toolbarLayout.addWidget(self.btnDelete)
@@ -384,7 +384,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #F5B041; 
-            }""")  # Keep button text white
+            }""")
         self.btnUndo.setObjectName("btnUndo")
         self.btnUndo.setToolTip("Undo last action (Ctrl+Z)")
         self.toolbarLayout.addWidget(self.btnUndo)
@@ -398,7 +398,7 @@ class Ui_MainWindow(object):
             }
             QPushButton:hover { 
                 background-color: #BDA0E3; 
-            }""")  # Keep button text white
+            }""")
         self.btnHighQuality.setObjectName("btnHighQuality")
         self.btnHighQuality.setToolTip("Toggle high quality preview")
         self.toolbarLayout.addWidget(self.btnHighQuality)
@@ -414,7 +414,7 @@ class Ui_MainWindow(object):
         # Sidebar trái (My template, Edit)
         self.listWidget = QtWidgets.QListWidget(parent=self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(0, 80, 150, 620))
-        self.listWidget.setStyleSheet("background-color: #FFFFFF; color: #000000;")  # Background to white, text to black
+        self.listWidget.setStyleSheet("background-color: #FFFFFF; color: #000000;")
         self.listWidget.setObjectName("listWidget")
         icon_paths = [
             "C:/Users/Admin/Downloads/IPR img/Icons/template.png",
@@ -743,7 +743,7 @@ class MainWindow(QtWidgets.QMainWindow):
         screen = QtWidgets.QApplication.primaryScreen().availableGeometry()
         self.resize(int(min(screen.width() * 0.9, 1200)), int(min(screen.height() * 0.9, 700)))
         self.fix_missing_icons()
-        self.debug_buttons()
+        QtCore.QTimer.singleShot(0, self.debug_buttons)  # Delay debug to ensure UI is rendered
 
     def debug_buttons(self):
         buttons = {
@@ -917,31 +917,29 @@ class MainWindow(QtWidgets.QMainWindow):
                 }}""")
 
     def apply_header(self):
+        if not self.ui.HeaderEdit.text():
+            QtWidgets.QMessageBox.warning(self, "Warning", "Please enter header text.")
+            return
         self.history.append(self.current_image.copy())
         draw_image = self.current_image.copy()
         width, height = draw_image.size
-
-        if self.header_image_path:
-            try:
-                header_img = Image.open(self.header_image_path).convert('RGBA')
-                header_img = header_img.resize((min(width // 2, header_img.width), min(50, header_img.height)), Image.Resampling.LANCZOS)
-                x_pos = (width - header_img.width) // 2
-                draw_image.paste(header_img, (x_pos, 10), header_img)
-            except Exception as e:
-                QtWidgets.QMessageBox.critical(self, "Error", f"Failed to apply header image: {str(e)}")
-                return
-        elif self.ui.HeaderEdit.text():
-            draw = ImageDraw.Draw(draw_image)
-            try:
-                font = ImageFont.truetype("arial.ttf", 24)
-            except:
-                font = ImageFont.load_default()
-            text = self.ui.HeaderEdit.text()
-            text_bbox = draw.textbbox((0, 0), text, font=font)
-            text_width = text_bbox[2] - text_bbox[0]
-            x_pos = (width - text_width) // 2
-            draw.text((x_pos, 10), text, fill=(0, 0, 0, 255), font=font)  # Thay đổi màu thành đen
-
+        draw = ImageDraw.Draw(draw_image)
+        font_name = self.ui.headerFontCombo.currentText().lower().replace(" ", "")
+        try:
+            font = ImageFont.truetype(f"{font_name}.ttf", self.ui.headerSizeSpinBox.value())
+        except:
+            font = ImageFont.load_default().font_variant(size=self.ui.headerSizeSpinBox.value())
+        text = self.ui.HeaderEdit.text()
+        x = self.ui.headerXSpinBox.value()
+        y = self.ui.headerYSpinBox.value()
+        if x < 0 or x > width or y < 0 or y > height:
+            QtWidgets.QMessageBox.warning(self, "Warning", "Position out of canvas bounds.")
+            return
+        color = (self.header_color.red(), self.header_color.green(), self.header_color.blue(), self.header_color.alpha())
+        draw.text((x, y), text, fill=color, font=font)
+        # Lưu vùng giới hạn của header
+        text_bbox = draw.textbbox((x, y), text, font=font)
+        self.labelPreview.header_bbox = text_bbox
         self.current_image = draw_image
         self.display_image()
 
@@ -1147,7 +1145,6 @@ def run_tkinter(saved_image_path=None):
 
 def run_pyqt():
     """Khởi động ứng dụng PyQt6 và xử lý chuyển đổi sang Tkinter khi nhấn Edit."""
-    # Thiết lập DPI scaling thủ công nếu cần
     os.environ["QT_SCALE_FACTOR"] = "1"
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("Fusion")
