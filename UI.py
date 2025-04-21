@@ -54,6 +54,10 @@ class EditorApp:
         self.file_menu.add_command(label="New", command=self.new_file)
         self.file_menu.add_command(label="Open", command=self.open_project)
         self.file_menu.add_command(label="Save", command=self.save_project)
+        self.file_menu.add_command(label="Export as PNG", command=lambda: self.canvas_logic.export_canvas_to_image("PNG"))
+        self.file_menu.add_command(label="Export as JPEG", command=lambda: self.canvas_logic.export_canvas_to_image("JPEG"))
+        self.file_menu.add_command(label="Export as BMP", command=lambda: self.canvas_logic.export_canvas_to_image("BMP"))
+        self.file_menu.add_command(label="Export as GIF", command=lambda: self.canvas_logic.export_canvas_to_image("GIF"))
         self.file_menu.add_separator()
         self.file_menu.add_command(label="Exit", command=self.root.quit)
 
@@ -97,6 +101,9 @@ class EditorApp:
 
         self.add_shape_button = ttk.Button(self.top_button_frame, text="Add Shape", command=self.canvas_logic.add_shape)
         self.add_shape_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
+
+        self.export_button = ttk.Button(self.top_button_frame, text="Export Image", command=self.show_export_options)
+        self.export_button.grid(row=0, column=3, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.manipulation_frame = ttk.Frame(self.main_frame)
         self.manipulation_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), padx=5, pady=5)
@@ -545,3 +552,12 @@ class EditorApp:
                 self.root.title(f"Text, Image, and Shape Editor - {filename}")
             else:
                 tk.messagebox.showerror("Error", "Failed to open the project.")
+    
+    def show_export_options(self):
+        """Hiển thị menu chọn định dạng xuất ảnh"""
+        menu = tk.Menu(self.root, tearoff=0)
+        menu.add_command(label="Export as PNG", command=lambda: self.canvas_logic.export_canvas_to_image("PNG"))
+        menu.add_command(label="Export as JPEG", command=lambda: self.canvas_logic.export_canvas_to_image("JPEG"))
+        menu.add_command(label="Export as BMP", command=lambda: self.canvas_logic.export_canvas_to_image("BMP"))
+        menu.add_command(label="Export as GIF", command=lambda: self.canvas_logic.export_canvas_to_image("GIF"))
+        menu.post(self.export_button.winfo_rootx(), self.export_button.winfo_rooty() + self.export_button.winfo_height())

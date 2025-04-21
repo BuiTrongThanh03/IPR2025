@@ -669,3 +669,99 @@ class CanvasEditorLogic:
             self.ui.canvas.delete(obj["canvas_id"])
         self.objects.clear()
         self.clear_selection()
+
+    def export_canvas_to_image(self, file_format="PNG"):
+        """Export toàn bộ nội dung trên canvas thành file ảnh."""
+        # Kiểm tra xem canvas có đối tượng không
+        if not self.objects:
+            tk.messagebox.showwarning("Warning", "Canvas is empty. Nothing to export.")
+            return False
+        
+        # Kiểm tra xem có đối tượng nào có hình ảnh không
+        valid_objects = [obj for obj in self.objects if obj.get("image") is not None]
+        if not valid_objects:
+            tk.messagebox.showwarning("Warning", "No visible objects found on canvas.")
+            return False
+        
+        try:
+            # Tìm bounding box của tất cả các đối tượng
+            min_x = min(obj["x"] for obj in valid_objects)
+            min_y = min(obj["y"] for obj in valid_objects)
+            max_x = max(obj["x"] + obj["image"].width for obj in valid_objects)
+            max_y = max(obj["y"] + obj["image"].height for obj in valid_objects)
+            
+            # Tính kích thước của hình ảnh xuất và đảm bảo kích thước dương
+            export_width = max(1, int(max_x - min_x))
+            export_height = max(1, int(max_y - min_y))
+            
+            # Tạo hình ảnh mới với nền trong suốt
+            export_image = Image.new("RGBA", (export_width, export_height), (0, 0, 0, 0))
+            
+            # Vẽ từng đối tượng lên hình ảnh xuất theo thứ tự z-index
+            for obj in self.objects:
+                if obj.get("image"):
+                    obj_image = obj["image"].convert("RGBA")  # Đảm bảo chế độ RGBA
+                    # Tính vị trí tương đối so với bounding box
+                    paste_x = max(0, int(obj["x"] - min_x))
+                    paste_y = max(0, int(obj["y"] - min_y))
+                    
+                    # Đảm bảo obj_image nằm trong kích thước export_image
+                    if paste_x + obj_image.width > export_width or paste_y + obj_image.height > export_height:
+                        # Cắt obj_image nếu cần thiết
+                        crop_width = min(obj_image.width, export_width - paste_x)
+                        crop_height = min(obj_image.height, export_height - paste_y)
+                        if crop_width > 0 and crop_height > 0:
+                            obj_image = obj_image.crop((0, 0, crop_width, crop_height))
+                        else:
+                            continue  # Bỏ qua đối tượng nếu nằm hoàn toàn ngoài khung
+                    
+                    # Paste với alpha mask
+                    export_image.paste(obj_image, (paste_x, paste_y), obj_image)
+            
+            # Mở hộp thoại lưu file
+            file_format = file_format.upper()
+            extensions = {
+                "PNG": ".png",
+                "JPEG": ".jpg",
+                "BMP": ".bmp",
+                "GIF": ".gif"
+            }
+            default_ext = extensions.get(file_format, ".png")
+            
+            filetypes = []
+            if file_format == "PNG":
+                filetypes = [("PNG files", "*.png"), ("JPEG files", "*.jpg"), ("All files", "*.*")]
+            elif file_format == "JPEG":
+                filetypes = [("JPEG files", "*.jpg"), ("PNG files", "*.png"), ("All files", "*.*")]
+            else:
+                filetypes = [(f"{file_format} files", f"*{default_ext}"), ("All files", "*.*")]
+            
+            filename = filedialog.asksaveasfilename(
+                defaultextension=default_ext,
+                filetypes=filetypes
+            )
+            
+            if not filename:
+                return False  # Người dùng đã hủy bỏ
+            
+            # Xử lý lưu file theo định dạng
+            if file_format == "JPEG":
+                # Chuyển sang RGB cho JPEG (loại bỏ kênh alpha)
+                bg = Image.new("RGB", export_image.size, (255, 255, 255))
+                bg.paste(export_image, mask=export_image.split()[3])  # Sử dụng alpha làm mask
+                bg.save(filename, "JPEG", quality=95)
+            else:
+                export_image.save(filename, file_format)
+            
+            tk.messagebox.showinfo("Success", f"Canvas exported successfully to {filename}")
+            return True
+        
+        except (ValueError, AttributeError) as e:
+            tk.messagebox.showerror("Error", f"Failed to calculate export dimensions: {e}")
+            return False
+        except IOError as e:
+            tk.messagebox.showerror("Error", f"Failed to save image: {e}\nPlease check if the destination is writable.")
+            return False
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+            return False
