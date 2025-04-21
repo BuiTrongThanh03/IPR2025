@@ -204,6 +204,8 @@ class CanvasEditorLogic:
                     self.highlight_object(obj)
                     self.ui.update_controls()
                 dialog.destroy()
+        
+        text_entry.bind('<Return>', lambda event: submit())
 
         ttk.Button(dialog, text="OK", command=submit).pack(pady=10)
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
@@ -320,6 +322,8 @@ class CanvasEditorLogic:
                 self.highlight_object(obj)
                 self.ui.update_controls()
             dialog.destroy()
+
+        dialog.bind('<Return>', lambda event: submit())
 
         ttk.Button(dialog, text="OK", command=submit).pack(pady=10)
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
