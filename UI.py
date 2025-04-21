@@ -65,6 +65,7 @@ class EditorApp:
         self.main_frame.grid_rowconfigure(2, weight=0)
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_columnconfigure(1, weight=0)
+
         self.canvas = tk.Canvas(self.main_frame, bg="white")
         self.canvas.grid(row=0, column=0, columnspan=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 5), pady=(0, 5))
 
@@ -140,64 +141,65 @@ class EditorApp:
         self.text_entry.bind("<Return>", self.text_logic.update_text_content)
 
         self.font_label = ttk.Label(self.edit_frame, text="Font:")
-        self.font_label.grid(row=1, column=0, sticky=tk.W, pady=2)
+        self.font_label.grid(row=0, column=4, sticky=tk.W, pady=2)
         available_fonts = ["Arial", "Times New Roman", "Courier New"]
         self.font_combo = ttk.Combobox(self.edit_frame, values=available_fonts, state="readonly")
         self.font_combo.set("Arial")
-        self.font_combo.grid(row=1, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.font_combo.grid(row=0, column=5, columnspan=2, sticky=(tk.W, tk.E), pady=2)
         self.font_combo.bind("<<ComboboxSelected>>", self.text_logic.update_font)
 
         self.font_size_label = ttk.Label(self.edit_frame, text="Font Size: 20")
-        self.font_size_label.grid(row=2, column=0, sticky=tk.W, pady=2)
+        self.font_size_label.grid(row=0, column=7, sticky=tk.W, pady=2)
         self.font_size_scale = ttk.Scale(self.edit_frame, from_=10, to=100, orient=tk.HORIZONTAL, variable=self.current_font_size, command=self.text_logic.update_font_size)
-        self.font_size_scale.grid(row=2, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.font_size_scale.grid(row=0, column=8, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.bold_check = ttk.Checkbutton(self.edit_frame, text="Bold", variable=self.font_bold, command=self.text_logic.update_font_style)
-        self.bold_check.grid(row=3, column=0, pady=2)
+        self.bold_check.grid(row=1, column=0, pady=2)
         self.italic_check = ttk.Checkbutton(self.edit_frame, text="Italic", variable=self.font_italic, command=self.text_logic.update_font_style)
-        self.italic_check.grid(row=3, column=1, pady=2)
+        self.italic_check.grid(row=1, column=1, pady=2)
         self.underline_check = ttk.Checkbutton(self.edit_frame, text="Underline", variable=self.font_underline, command=self.text_logic.update_font_style)
-        self.underline_check.grid(row=3, column=2, pady=2)
+        self.underline_check.grid(row=1, column=2, pady=2)
 
         self.text_color_button = ttk.Button(self.edit_frame, text="Pick Text Color", command=self.text_logic.pick_text_color)
-        self.text_color_button.grid(row=4, column=0, columnspan=3, pady=2)
+        self.text_color_button.grid(row=1, column=3, columnspan=3, pady=2)
 
         self.stroke_width_label = ttk.Label(self.edit_frame, text="Stroke Width: 0")
-        self.stroke_width_label.grid(row=5, column=0, sticky=tk.W, pady=2)
+        self.stroke_width_label.grid(row=1, column=6, sticky=tk.W, pady=2)
         self.stroke_width_scale = ttk.Scale(self.edit_frame, from_=0, to=5, orient=tk.HORIZONTAL, variable=self.current_stroke_width, command=self.text_logic.update_stroke_width)
-        self.stroke_width_scale.grid(row=5, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.stroke_width_scale.grid(row=1, column=7, columnspan=2, sticky=(tk.W, tk.E), pady=2)
         self.stroke_color_button = ttk.Button(self.edit_frame, text="Pick Stroke Color", command=self.text_logic.pick_stroke_color)
-        self.stroke_color_button.grid(row=6, column=0, columnspan=3, pady=2)
+        self.stroke_color_button.grid(row=1, column=10, columnspan=3, pady=2)
 
+        # Transparency for shape and image
         self.transparency_label = ttk.Label(self.edit_frame, text="Transparency: 255")
         self.transparency_label.grid(row=7, column=0, sticky=tk.W, pady=2)
         self.transparency_scale = ttk.Scale(self.edit_frame, from_=0, to=255, orient=tk.HORIZONTAL, variable=self.current_transparency, command=self.update_transparency)
         self.transparency_scale.grid(row=7, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
-
+        
         # Shape controls
+        self.shape_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.shape_logic.pick_shape_border_color)
+        self.shape_border_color_button.grid(row=7, column=4, columnspan=3, pady=2)
+
+        self.shape_fill_color_button = ttk.Button(self.edit_frame, text="Pick Fill Color", command=self.shape_logic.pick_shape_fill_color)
+        self.shape_fill_color_button.grid(row=7, column=7, columnspan=3, pady=2)
+
         self.shape_width_label = ttk.Label(self.edit_frame, text="Shape Width (cm):")
         self.shape_width_label.grid(row=8, column=0, sticky=tk.W, pady=2)
         self.shape_width_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_width_cm, command=lambda value: self.shape_logic.update_shape_size())
         self.shape_width_scale.grid(row=8, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.shape_height_label = ttk.Label(self.edit_frame, text="Shape Height (cm):")
-        self.shape_height_label.grid(row=9, column=0, sticky=tk.W, pady=2)
+        self.shape_height_label.grid(row=8, column=4, sticky=tk.W, pady=2)
         self.shape_height_scale = ttk.Scale(self.edit_frame, from_=1, to=50, orient=tk.HORIZONTAL, variable=self.current_shape_height_cm, command=lambda value: self.shape_logic.update_shape_size())
-        self.shape_height_scale.grid(row=9, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
-
-        self.apply_size_button = ttk.Button(self.edit_frame, text="Apply Size", command=self.shape_logic.update_shape_size)
-        self.apply_size_button.grid(row=10, column=0, columnspan=3, pady=2)
-
-        self.shape_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.shape_logic.pick_shape_border_color)
-        self.shape_border_color_button.grid(row=11, column=0, columnspan=3, pady=2)
-
-        self.shape_fill_color_button = ttk.Button(self.edit_frame, text="Pick Fill Color", command=self.shape_logic.pick_shape_fill_color)
-        self.shape_fill_color_button.grid(row=12, column=0, columnspan=3, pady=2)
+        self.shape_height_scale.grid(row=8, column=5, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.shape_border_width_label = ttk.Label(self.edit_frame, text="Border Width: 0")
-        self.shape_border_width_label.grid(row=13, column=0, sticky=tk.W, pady=2)
+        self.shape_border_width_label.grid(row=8, column=7, sticky=tk.W, pady=2)
         self.shape_border_width_scale = ttk.Scale(self.edit_frame, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.current_border_width, command=self.shape_logic.update_shape_border_width)
-        self.shape_border_width_scale.grid(row=13, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.shape_border_width_scale.grid(row=8, column=8, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+
+        self.apply_size_button = ttk.Button(self.edit_frame, text="Apply Size", command=self.shape_logic.update_shape_size)
+        self.apply_size_button.grid(row=9, column=0, columnspan=3, pady=2)
 
         self.shape_corner_label = ttk.Label(self.edit_frame, text="Corner Radius: 0")
         self.shape_corner_label.grid(row=14, column=0, sticky=tk.W, pady=2)
@@ -205,33 +207,32 @@ class EditorApp:
         self.shape_corner_scale.grid(row=14, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         # Image controls
+        self.image_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.image_logic.pick_image_border_color)
+        self.image_border_color_button.grid(row=7, column=3, pady=2)
+        self.flip_h_button = ttk.Button(self.edit_frame, text="Flip Horizontal", command=self.image_logic.flip_horizontal)
+        self.flip_h_button.grid(row=7, column=4, pady=2)
+        self.flip_v_button = ttk.Button(self.edit_frame, text="Flip Vertical", command=self.image_logic.flip_vertical)
+        self.flip_v_button.grid(row=7, column=5, pady=2)
+
         self.image_width_label = ttk.Label(self.edit_frame, text="Image Width (px):")
         self.image_width_label.grid(row=15, column=0, sticky=tk.W, pady=2)
-        self.image_width_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_width, command=self.image_logic.update_image_size)
+        self.image_width_scale = ttk.Scale(self.edit_frame, from_=10, to=2000, orient=tk.HORIZONTAL, variable=self.current_image_width, command=self.image_logic.update_image_size)
         self.image_width_scale.grid(row=15, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_height_label = ttk.Label(self.edit_frame, text="Image Height (px):")
-        self.image_height_label.grid(row=16, column=0, sticky=tk.W, pady=2)
-        self.image_height_scale = ttk.Scale(self.edit_frame, from_=10, to=1000, orient=tk.HORIZONTAL, variable=self.current_image_height, command=self.image_logic.update_image_size)
-        self.image_height_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_height_label.grid(row=15, column=3, sticky=tk.W, pady=2)
+        self.image_height_scale = ttk.Scale(self.edit_frame, from_=10, to=2000, orient=tk.HORIZONTAL, variable=self.current_image_height, command=self.image_logic.update_image_size)
+        self.image_height_scale.grid(row=15, column=4, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_corner_label = ttk.Label(self.edit_frame, text="Corner Radius: 0")
-        self.image_corner_label.grid(row=17, column=0, sticky=tk.W, pady=2)
+        self.image_corner_label.grid(row=16, column=0, sticky=tk.W, pady=2)
         self.image_corner_scale = ttk.Scale(self.edit_frame, from_=0, to=self.max_radius, orient=tk.HORIZONTAL, variable=self.current_corner_radius, command=self.image_logic.update_image_corner)
-        self.image_corner_scale.grid(row=17, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
+        self.image_corner_scale.grid(row=16, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.image_border_width_label = ttk.Label(self.edit_frame, text="Border Width: 0")
-        self.image_border_width_label.grid(row=18, column=0, sticky=tk.W, pady=2)
+        self.image_border_width_label.grid(row=16, column=3, sticky=tk.W, pady=2)
         self.image_border_width_scale = ttk.Scale(self.edit_frame, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.current_border_width, command=self.image_logic.update_image_border_width)
-        self.image_border_width_scale.grid(row=18, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=2)
-
-        self.image_border_color_button = ttk.Button(self.edit_frame, text="Pick Border Color", command=self.image_logic.pick_image_border_color)
-        self.image_border_color_button.grid(row=19, column=0, columnspan=3, pady=2)
-
-        self.flip_h_button = ttk.Button(self.edit_frame, text="Flip Horizontal", command=self.image_logic.flip_horizontal)
-        self.flip_h_button.grid(row=20, column=0, pady=2)
-        self.flip_v_button = ttk.Button(self.edit_frame, text="Flip Vertical", command=self.image_logic.flip_vertical)
-        self.flip_v_button.grid(row=20, column=1, pady=2)
+        self.image_border_width_scale.grid(row=16, column=4, columnspan=2, sticky=(tk.W, tk.E), pady=2)
 
         self.canvas.bind("<Button-1>", self.canvas_logic.select_object)
         self.canvas.bind("<B1-Motion>", self.canvas_logic.drag_object)
