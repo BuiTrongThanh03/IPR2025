@@ -23,7 +23,7 @@ class CanvasEditorLogic:
         """Tải hình ảnh và thêm vào danh sách objects"""
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg *.jpeg *.bmp *.gif")])
         if file_path:
-            img = Image.open(file_path).resize((100, 100), Image.Resampling.LANCZOS)
+            img = Image.open(file_path)
             obj_id = str(uuid.uuid4())
             obj = {
                 "type": "image",
