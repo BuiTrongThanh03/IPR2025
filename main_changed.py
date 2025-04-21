@@ -71,7 +71,7 @@ class Ui_MainWindow(object):
         self.page = QtWidgets.QWidget()
         self.page.setObjectName("page")
         self.New_template = QtWidgets.QGroupBox(parent=self.page)
-        self.New_template.setGeometry(QtCore.QRect(7, 0, 1036, 610))  # Adjusted height to minimize whitespace
+        self.New_template.setGeometry(QtCore.QRect(7, 0, 1036, 620))
         self.New_template.setStyleSheet("background-color: #FFFFFF; color: #000000;")
         self.New_template.setObjectName("New_template")
 
@@ -158,13 +158,13 @@ class Ui_MainWindow(object):
         self.headerTabLayout.addRow("Text:", self.HeaderEdit)
         self.headerXSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerXSpinBox.setStyleSheet("color: #000000;")
-        self.headerXSpinBox.setRange(0, 1200)
-        self.headerXSpinBox.setValue(75)
+        self.headerXSpinBox.setRange(0, 800)
+        self.headerXSpinBox.setValue(10)
         self.headerTabLayout.addRow("X:", self.headerXSpinBox)
         self.headerYSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerYSpinBox.setStyleSheet("color: #000000;")
-        self.headerYSpinBox.setRange(0, 800)
-        self.headerYSpinBox.setValue(60)
+        self.headerYSpinBox.setRange(0, 600)
+        self.headerYSpinBox.setValue(120)
         self.headerTabLayout.addRow("Y:", self.headerYSpinBox)
         self.headerFontCombo = QtWidgets.QComboBox(parent=self.headerTab)
         self.headerFontCombo.setStyleSheet("color: #000000;")
@@ -173,7 +173,7 @@ class Ui_MainWindow(object):
         self.headerSizeSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerSizeSpinBox.setStyleSheet("color: #000000;")
         self.headerSizeSpinBox.setRange(8, 72)
-        self.headerSizeSpinBox.setValue(20)
+        self.headerSizeSpinBox.setValue(36)
         self.headerTabLayout.addRow("Size:", self.headerSizeSpinBox)
         self.headerColorButton = QtWidgets.QPushButton(parent=self.headerTab)
         self.headerColorButton.setText("Choose Color")
@@ -203,20 +203,6 @@ class Ui_MainWindow(object):
                 background-color: #5A9BD4; 
             }""")
         self.headerTabLayout.addRow(self.btnApplyHeader)
-        self.btnMoveHeaderLeft = QtWidgets.QPushButton(parent=self.headerTab)
-        self.btnMoveHeaderLeft.setText("Move to Left")
-        self.btnMoveHeaderLeft.setMinimumSize(QtCore.QSize(100, 30))
-        self.btnMoveHeaderLeft.setStyleSheet("""
-            QPushButton { 
-                background-color: #10B981; 
-                color: white; 
-                border-radius: 5px; 
-                padding: 8px; 
-            }
-            QPushButton:hover { 
-                background-color: #34D399; 
-            }""")
-        self.headerTabLayout.addRow(self.btnMoveHeaderLeft)
         self.tabWidget.addTab(self.headerTab, "Header")
 
         # Tab Footer
@@ -231,13 +217,13 @@ class Ui_MainWindow(object):
         self.footerTabLayout.addRow("Text:", self.FooterEdit)
         self.footerXSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerXSpinBox.setStyleSheet("color: #000000;")
-        self.footerXSpinBox.setRange(0, 1200)
-        self.footerXSpinBox.setValue(75)
+        self.footerXSpinBox.setRange(0, 800)
+        self.footerXSpinBox.setValue(0)
         self.footerTabLayout.addRow("X:", self.footerXSpinBox)
         self.footerYSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerYSpinBox.setStyleSheet("color: #000000;")
-        self.footerYSpinBox.setRange(0, 800)
-        self.footerYSpinBox.setValue(720)
+        self.footerYSpinBox.setRange(0, 600)
+        self.footerYSpinBox.setValue(550)
         self.footerTabLayout.addRow("Y:", self.footerYSpinBox)
         self.footerFontCombo = QtWidgets.QComboBox(parent=self.footerTab)
         self.footerFontCombo.setStyleSheet("color: #000000;")
@@ -246,7 +232,7 @@ class Ui_MainWindow(object):
         self.footerSizeSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerSizeSpinBox.setStyleSheet("color: #000000;")
         self.footerSizeSpinBox.setRange(8, 72)
-        self.footerSizeSpinBox.setValue(20)
+        self.footerSizeSpinBox.setValue(36)
         self.footerTabLayout.addRow("Size:", self.footerSizeSpinBox)
         self.footerColorButton = QtWidgets.QPushButton(parent=self.footerTab)
         self.footerColorButton.setText("Choose Color")
@@ -300,14 +286,47 @@ class Ui_MainWindow(object):
         self.logoTabLayout.addRow(self.btnUploadLogo)
         self.logoXSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
         self.logoXSpinBox.setStyleSheet("color: #000000;")
-        self.logoXSpinBox.setRange(0, 1200)
-        self.logoXSpinBox.setValue(75)
+        self.logoXSpinBox.setRange(0, 800)
+        self.logoXSpinBox.setValue(10)
         self.logoTabLayout.addRow("X:", self.logoXSpinBox)
         self.logoYSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
         self.logoYSpinBox.setStyleSheet("color: #000000;")
-        self.logoYSpinBox.setRange(0, 800)
-        self.logoYSpinBox.setValue(50)
+        self.logoYSpinBox.setRange(0, 600)
+        self.logoYSpinBox.setValue(10)
         self.logoTabLayout.addRow("Y:", self.logoYSpinBox)
+        self.logoSizeSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
+        self.logoSizeSpinBox.setStyleSheet("color: #000000;")
+        self.logoSizeSpinBox.setRange(20, 300)
+        self.logoSizeSpinBox.setValue(100)
+        self.logoTabLayout.addRow("Size:", self.logoSizeSpinBox)
+        self.btnIncreaseLogoSize = QtWidgets.QPushButton(parent=self.logoTab)
+        self.btnIncreaseLogoSize.setText("Increase Size")
+        self.btnIncreaseLogoSize.setMinimumSize(QtCore.QSize(100, 30))
+        self.btnIncreaseLogoSize.setStyleSheet("""
+            QPushButton { 
+                background-color: #4682B4; 
+                color: white; 
+                border-radius: 5px; 
+                padding: 8px; 
+            }
+            QPushButton:hover { 
+                background-color: #5A9BD4; 
+            }""")
+        self.logoTabLayout.addRow(self.btnIncreaseLogoSize)
+        self.btnDecreaseLogoSize = QtWidgets.QPushButton(parent=self.logoTab)
+        self.btnDecreaseLogoSize.setText("Decrease Size")
+        self.btnDecreaseLogoSize.setMinimumSize(QtCore.QSize(100, 30))
+        self.btnDecreaseLogoSize.setStyleSheet("""
+            QPushButton { 
+                background-color: #4682B4; 
+                color: white; 
+                border-radius: 5px; 
+                padding: 8px; 
+            }
+            QPushButton:hover { 
+                background-color: #5A9BD4; 
+            }""")
+        self.logoTabLayout.addRow(self.btnDecreaseLogoSize)
         self.btnApplyLogo = QtWidgets.QPushButton(parent=self.logoTab)
         self.btnApplyLogo.setText("Apply Logo")
         self.btnApplyLogo.setMinimumSize(QtCore.QSize(100, 30))
@@ -322,39 +341,24 @@ class Ui_MainWindow(object):
                 background-color: #5A9BD4; 
             }""")
         self.logoTabLayout.addRow(self.btnApplyLogo)
-        self.btnMoveLogoLeft = QtWidgets.QPushButton(parent=self.logoTab)
-        self.btnMoveLogoLeft.setText("Move to Left")
-        self.btnMoveLogoLeft.setMinimumSize(QtCore.QSize(100, 30))
-        self.btnMoveLogoLeft.setStyleSheet("""
-            QPushButton { 
-                background-color: #10B981; 
-                color: white; 
-                border-radius: 5px; 
-                padding: 8px; 
-            }
-            QPushButton:hover { 
-                background-color: #34D399; 
-            }""")
-        self.logoTabLayout.addRow(self.btnMoveLogoLeft)
         self.tabWidget.addTab(self.logoTab, "Logo")
 
         self.sidebarLayout.addWidget(self.tabWidget)
         self.sidebarLayout.addStretch()
 
-        # Toolbar (adjusted to reduce whitespace)
+        # Toolbar
         self.horizontalLayoutWidget_3 = QtWidgets.QWidget(parent=self.New_template)
-        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(10, 510, 1016, 40))  # Reduced height from 50 to 40
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(10, 510, 1016, 50))
         self.horizontalLayoutWidget_3.setObjectName("horizontalLayoutWidget_3")
         self.toolbarLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.toolbarLayout.setContentsMargins(0, 0, 0, 0)
-        self.toolbarLayout.setSpacing(6)
         self.btnRotate = QtWidgets.QPushButton(parent=self.horizontalLayoutWidget_3)
         self.btnRotate.setStyleSheet("""
             QPushButton { 
                 background-color: #6B7280; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #9CA3AF; 
@@ -368,7 +372,7 @@ class Ui_MainWindow(object):
                 background-color: #6B7280; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #9CA3AF; 
@@ -382,7 +386,7 @@ class Ui_MainWindow(object):
                 background-color: #4682B4; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #5A9BD4; 
@@ -396,7 +400,7 @@ class Ui_MainWindow(object):
                 background-color: #DC143C; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #F08080; 
@@ -410,7 +414,7 @@ class Ui_MainWindow(object):
                 background-color: #F4A261; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #F5B041; 
@@ -424,7 +428,7 @@ class Ui_MainWindow(object):
                 background-color: #9370DB; 
                 color: white; 
                 border-radius: 5px; 
-                padding: 6px; 
+                padding: 8px; 
             }
             QPushButton:hover { 
                 background-color: #BDA0E3; 
@@ -479,7 +483,7 @@ class Ui_MainWindow(object):
         self.btnHighQuality.setText(_translate("MainWindow", "High Quality"))
 
 class CropLabel(QtWidgets.QLabel):
-    """Lớp QLabel tùy chỉnh hỗ trợ cắt ảnh và kéo các phần tử (header, footer, logo)."""
+    """Lớp QLabel tùy chỉnh hỗ trợ cắt ảnh và kéo văn bản trực tiếp."""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setMouseTracking(True)
@@ -487,31 +491,28 @@ class CropLabel(QtWidgets.QLabel):
         self.end_pos = None
         self.cropping = False
         self.crop_mode = False
-        self.dragging_element = None  # "header", "footer", hoặc "logo"
+        self.dragging_text = None  # "header" hoặc "footer"
         self.parent_window = parent
         self.scale_factor = 1.0
         self.setAcceptDrops(True)
-        self.header_bbox = None
-        self.footer_bbox = None
-        self.logo_bbox = None
+        self.header_bbox = None  # Vùng giới hạn của header
+        self.footer_bbox = None  # Vùng giới hạn của footer
         self.preview_text = None
-        self.preview_logo = None
         self.preview_pos = None
 
     def enter_crop_mode(self):
         self.crop_mode = True
-        self.dragging_element = None
+        self.dragging_text = None
         self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.CrossCursor))
         self.update()
 
     def exit_modes(self):
         self.crop_mode = False
-        self.dragging_element = None
+        self.dragging_text = None
         self.cropping = False
         self.start_pos = None
         self.end_pos = None
         self.preview_text = None
-        self.preview_logo = None
         self.preview_pos = None
         self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
         self.update()
@@ -525,34 +526,22 @@ class CropLabel(QtWidgets.QLabel):
                 self.update()
             else:
                 pos = event.position().toPoint()
-                element_type = self.get_element_at_position(pos)
-                if element_type:
-                    self.dragging_element = element_type
+                text_type = self.get_text_at_position(pos)
+                if text_type:
+                    self.dragging_text = text_type
                     self.start_pos = pos
                     self.end_pos = pos
-                    if element_type == "header":
-                        self.preview_text = self.parent_window.ui.HeaderEdit.text()
-                    elif element_type == "footer":
-                        self.preview_text = self.parent_window.ui.FooterEdit.text()
-                    elif element_type == "logo" and self.parent_window.logo_image_path:
-                        try:
-                            logo_img = Image.open(self.parent_window.logo_image_path).convert('RGBA')
-                            logo_img = logo_img.resize((min(100, logo_img.width), min(100, logo_img.height)), Image.Resampling.LANCZOS)
-                            self.preview_logo = logo_img
-                        except Exception as e:
-                            QtWidgets.QMessageBox.critical(self.parent_window, "Error", f"Failed to load logo for preview: {str(e)}")
-                            self.dragging_element = None
+                    self.preview_text = self.parent_window.ui.HeaderEdit.text() if text_type == "header" else self.parent_window.ui.FooterEdit.text()
                     self.update()
                 else:
-                    QtWidgets.QMessageBox.information(self.parent_window, "Info", "Click on header, footer, or logo to drag.")
+                    QtWidgets.QMessageBox.information(self.parent_window, "Info", "Click on header or footer text to drag.")
 
     def mouseMoveEvent(self, event):
-        if self.cropping or self.dragging_element:
+        if self.cropping or self.dragging_text:
             self.end_pos = event.position().toPoint()
             self.preview_pos = self.end_pos
-            if self.dragging_element:
+            if self.dragging_text:
                 self.update_spin_boxes()
-                self.parent_window.apply_elements()  # Update canvas in real-time
             self.update()
 
     def mouseReleaseEvent(self, event):
@@ -561,14 +550,14 @@ class CropLabel(QtWidgets.QLabel):
                 self.cropping = False
                 self.apply_crop()
                 self.exit_modes()
-            elif self.dragging_element:
-                self.apply_element_position()
+            elif self.dragging_text:
+                self.apply_text_position()
                 self.exit_modes()
         elif event.button() == QtCore.Qt.MouseButton.RightButton:
             self.exit_modes()
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key.Key_Escape and (self.crop_mode or self.dragging_element):
+        if event.key() == QtCore.Qt.Key.Escape and (self.crop_mode or self.dragging_text):
             self.exit_modes()
 
     def paintEvent(self, event):
@@ -592,33 +581,21 @@ class CropLabel(QtWidgets.QLabel):
             painter.drawText(text_pos, text)
         if self.cropping and self.start_pos and self.end_pos:
             painter.setOpacity(1.0)
-            pen = QtGui.QPen(QtGui.QColor(70, 130, 180), 3, QtCore.Qt.PenStyle.SolidLine)
+            pen = QtGui.QPen(QtGui.QColor(70, 130, 180), 3, QtCore.Qt.PenStyle.SolidLine)  # SteelBlue
             painter.setPen(pen)
             rect = QtCore.QRect(self.start_pos, self.end_pos)
             painter.drawRect(rect)
-        if self.dragging_element and self.start_pos and self.end_pos:
+        if self.dragging_text and self.start_pos and self.end_pos:
             painter.setOpacity(0.5)
             pen = QtGui.QPen(QtGui.QColor(70, 130, 180), 3, QtCore.Qt.PenStyle.SolidLine)
             painter.setPen(pen)
-            if self.preview_text and self.preview_pos and self.dragging_element in ["header", "footer"]:
-                font = QtGui.QFont("Arial", 12)
-                painter.setFont(font)
+            painter.setFont(QtGui.QFont("Arial", 12))
+            if self.preview_text and self.preview_pos:
                 painter.drawText(self.preview_pos, self.preview_text)
                 text_rect = painter.fontMetrics().boundingRect(self.preview_text)
                 rect = QtCore.QRect(
                     self.preview_pos.x(), self.preview_pos.y(),
                     text_rect.width(), text_rect.height()
-                )
-                painter.drawRect(rect)
-            elif self.preview_logo and self.preview_pos and self.dragging_element == "logo":
-                logo_array = np.array(self.preview_logo)
-                height, width = logo_array.shape[:2]
-                q_image = QtGui.QImage(logo_array.data, width, height, width * 4, QtGui.QImage.Format.Format_RGBA8888)
-                pixmap = QtGui.QPixmap.fromImage(q_image)
-                painter.drawPixmap(self.preview_pos, pixmap)
-                rect = QtCore.QRect(
-                    self.preview_pos.x(), self.preview_pos.y(),
-                    width, height
                 )
                 painter.drawRect(rect)
             painter.setOpacity(1.0)
@@ -647,7 +624,7 @@ class CropLabel(QtWidgets.QLabel):
                 self.parent_window.load_image(file_path)
                 break
 
-    def get_element_at_position(self, pos):
+    def get_text_at_position(self, pos):
         if not self.parent_window.current_image:
             return None
         pixmap = self.pixmap()
@@ -663,8 +640,6 @@ class CropLabel(QtWidgets.QLabel):
             return "header"
         if self.footer_bbox and self.is_point_in_bbox(x, y, self.footer_bbox):
             return "footer"
-        if self.logo_bbox and self.is_point_in_bbox(x, y, self.logo_bbox):
-            return "logo"
         return None
 
     def is_point_in_bbox(self, x, y, bbox):
@@ -672,7 +647,7 @@ class CropLabel(QtWidgets.QLabel):
         return left <= x <= right and top <= y <= bottom
 
     def update_spin_boxes(self):
-        if not self.parent_window.current_image or not self.dragging_element:
+        if not self.parent_window.current_image or not self.dragging_text:
             return
         pixmap = self.pixmap()
         if not pixmap:
@@ -685,21 +660,17 @@ class CropLabel(QtWidgets.QLabel):
         y = int(self.end_pos.y() * scale_y)
         x = max(0, min(x, image_size[0]))
         y = max(0, min(y, image_size[1]))
-        if self.dragging_element == "header":
+        if self.dragging_text == "header":
             self.parent_window.ui.headerXSpinBox.setValue(x)
             self.parent_window.ui.headerYSpinBox.setValue(y)
             self.parent_window.ui.tabWidget.setCurrentWidget(self.parent_window.ui.headerTab)
-        elif self.dragging_element == "footer":
+        elif self.dragging_text == "footer":
             self.parent_window.ui.footerXSpinBox.setValue(x)
             self.parent_window.ui.footerYSpinBox.setValue(y)
             self.parent_window.ui.tabWidget.setCurrentWidget(self.parent_window.ui.footerTab)
-        elif self.dragging_element == "logo":
-            self.parent_window.ui.logoXSpinBox.setValue(x)
-            self.parent_window.ui.logoYSpinBox.setValue(y)
-            self.parent_window.ui.tabWidget.setCurrentWidget(self.parent_window.ui.logoTab)
 
-    def apply_element_position(self):
-        if not self.parent_window.current_image or not self.dragging_element:
+    def apply_text_position(self):
+        if not self.parent_window.current_image or not self.dragging_text:
             return
         pixmap = self.pixmap()
         if not pixmap:
@@ -712,19 +683,14 @@ class CropLabel(QtWidgets.QLabel):
         y = int(self.end_pos.y() * scale_y)
         x = max(0, min(x, image_size[0]))
         y = max(0, min(y, image_size[1]))
-        self.parent_window.history.append(self.parent_window.current_image.copy())
-        if self.dragging_element == "header":
+        if self.dragging_text == "header":
             self.parent_window.ui.headerXSpinBox.setValue(x)
             self.parent_window.ui.headerYSpinBox.setValue(y)
             self.parent_window.apply_header()
-        elif self.dragging_element == "footer":
+        elif self.dragging_text == "footer":
             self.parent_window.ui.footerXSpinBox.setValue(x)
             self.parent_window.ui.footerYSpinBox.setValue(y)
             self.parent_window.apply_footer()
-        elif self.dragging_element == "logo":
-            self.parent_window.ui.logoXSpinBox.setValue(x)
-            self.parent_window.ui.logoYSpinBox.setValue(y)
-            self.parent_window.apply_logo()
 
     def apply_crop(self):
         if not self.parent_window.current_image:
@@ -747,8 +713,9 @@ class CropLabel(QtWidgets.QLabel):
         if left < right and top < bottom:
             self.parent_window.history.append(self.parent_window.current_image.copy())
             self.parent_window.current_image = self.parent_window.current_image.crop((left, top, right, bottom))
-            self.parent_window.base_image = self.parent_window.current_image.copy()
+            self.parent_window.base_image = self.parent_window.current_image.copy()  # Update base_image
             self.parent_window.display_image()
+            # Cập nhật lại tọa độ văn bản sau khi crop
             self.parent_window.adjust_text_positions_after_crop(left, top, right - left, bottom - top)
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -772,13 +739,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelPreview.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
 
         # Khởi tạo canvas trắng
-        self.current_image = Image.new('RGBA', (1200, 800), (0, 0, 0, 0))
+        self.current_image = Image.new('RGBA', (800, 600), (0, 0, 0, 0))
         self.original_image = self.current_image.copy()
-        self.base_image = self.current_image.copy()
+        self.base_image = self.current_image.copy()  # Store base image without text/logo
         self.image_path = None
         self.history = deque(maxlen=10)
         self.logo_image_path = None
-        self.logo_height = 100
+        self.logo_height = 100  # Default logo height for alignment
         self.header_color = QtGui.QColor(0, 0, 0, 255)
         self.footer_color = QtGui.QColor(0, 0, 0, 255)
         self.ui.stackedWidget.setCurrentWidget(self.ui.page)
@@ -801,8 +768,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.headerColorButton.clicked.connect(self.choose_header_color)
         self.ui.footerColorButton.clicked.connect(self.choose_footer_color)
         self.ui.btnHighQuality.clicked.connect(self.toggle_high_quality)
-        self.ui.btnMoveHeaderLeft.clicked.connect(self.move_header_left)
-        self.ui.btnMoveLogoLeft.clicked.connect(self.move_logo_left)
+        self.ui.btnIncreaseLogoSize.clicked.connect(self.increase_logo_size)
+        self.ui.btnDecreaseLogoSize.clicked.connect(self.decrease_logo_size)
 
         # Phím tắt
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+R"), self, self.rotate_image)
@@ -832,8 +799,8 @@ class MainWindow(QtWidgets.QMainWindow):
             "headerColorButton": self.ui.headerColorButton,
             "footerColorButton": self.ui.footerColorButton,
             "btnHighQuality": self.ui.btnHighQuality,
-            "btnMoveHeaderLeft": self.ui.btnMoveHeaderLeft,
-            "btnMoveLogoLeft": self.ui.btnMoveLogoLeft,
+            "btnIncreaseLogoSize": self.ui.btnIncreaseLogoSize,
+            "btnDecreaseLogoSize": self.ui.btnDecreaseLogoSize,
         }
         for name, button in buttons.items():
             try:
@@ -858,7 +825,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if index == 0:
             self.ui.stackedWidget.setCurrentWidget(self.ui.page)
             print(f"Switched to page index: {self.ui.stackedWidget.currentIndex()}")
-        else:
+        else:  # index == 1 (Edit)
             temp_file_path = None
             if self.current_image:
                 try:
@@ -887,11 +854,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.image_path = file_path
             self.original_image = Image.open(file_path).convert('RGBA')
             self.current_image = self.original_image.copy()
-            self.base_image = self.current_image.copy()
+            self.base_image = self.current_image.copy()  # Initialize base_image
             self.history.clear()
             self.labelPreview.header_bbox = None
             self.labelPreview.footer_bbox = None
-            self.labelPreview.logo_bbox = None
             print(f"Loaded image size: {self.current_image.size}")
             self.display_image()
             file_name = os.path.basename(file_path)
@@ -906,17 +872,25 @@ class MainWindow(QtWidgets.QMainWindow):
             height, width = image_array.shape[:2]
             bytes_per_line = 4 * width
             q_image = QtGui.QImage(image_array.data, width, height, bytes_per_line, QtGui.QImage.Format.Format_RGBA8888)
+            
+            # Hỗ trợ màn hình DPI cao
             device_pixel_ratio = self.ui.widgetPreview.devicePixelRatioF()
             q_image.setDevicePixelRatio(device_pixel_ratio)
+            
             pixmap = QtGui.QPixmap.fromImage(q_image)
+            
+            # Tính toán kích thước hiển thị
             label_size = self.labelPreview.size()
             image_size = QtCore.QSize(width, height)
             scale_factor = self.labelPreview.scale_factor
             if self.high_quality_mode:
                 scale_factor *= 2
+            
+            # Tỷ lệ hiển thị tối ưu
             scaled_size = image_size * scale_factor * device_pixel_ratio
             scaled_size = scaled_size.boundedTo(label_size * device_pixel_ratio)
             scaled_size = scaled_size.expandedTo(QtCore.QSize(1, 1))
+            
             scaled_pixmap = pixmap.scaled(
                 scaled_size,
                 QtCore.Qt.AspectRatioMode.KeepAspectRatio,
@@ -938,10 +912,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.current_image:
             self.history.append(self.current_image.copy())
             self.current_image = self.current_image.rotate(-90, expand=True)
-            self.base_image = self.current_image.copy()
+            self.base_image = self.current_image.copy()  # Update base_image
             self.labelPreview.header_bbox = None
             self.labelPreview.footer_bbox = None
-            self.labelPreview.logo_bbox = None
             self.display_image()
 
     def start_crop(self):
@@ -986,39 +959,44 @@ class MainWindow(QtWidgets.QMainWindow):
                     background-color: {color.lighter(110).name()}; 
                 }}""")
 
-    def move_header_left(self):
-        self.ui.headerXSpinBox.setValue(75)
-        self.ui.headerYSpinBox.setValue(60)
-        self.apply_elements()
+    def increase_logo_size(self):
+        current_size = self.ui.logoSizeSpinBox.value()
+        new_size = min(current_size + 10, 300)  # Tăng 10, tối đa 300
+        self.ui.logoSizeSpinBox.setValue(new_size)
+        self.apply_logo()
 
-    def move_logo_left(self):
-        self.ui.logoXSpinBox.setValue(75)
-        self.ui.logoYSpinBox.setValue(50)
-        self.apply_elements()
+    def decrease_logo_size(self):
+        current_size = self.ui.logoSizeSpinBox.value()
+        new_size = max(current_size - 10, 20)  # Giảm 10, tối thiểu 20
+        self.ui.logoSizeSpinBox.setValue(new_size)
+        self.apply_logo()
 
     def apply_elements(self):
         """Apply logo, header, and footer to the base image in order."""
         if not self.current_image:
             return
-        self.current_image = self.base_image.copy()
+        self.current_image = self.base_image.copy()  # Start with base image
         width, height = self.current_image.size
 
         # Apply logo if available
         if self.logo_image_path:
             try:
                 logo_img = Image.open(self.logo_image_path).convert('RGBA')
-                logo_img = logo_img.resize((min(100, logo_img.width), min(100, logo_img.height)), Image.Resampling.LANCZOS)
-                self.logo_height = logo_img.height
+                logo_size = self.ui.logoSizeSpinBox.value()
+                # Giữ tỷ lệ khung hình khi thay đổi kích thước
+                aspect_ratio = logo_img.width / logo_img.height
+                new_width = logo_size
+                new_height = int(new_width / aspect_ratio)
+                logo_img = logo_img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                self.logo_height = new_height  # Update logo height
                 x = self.ui.logoXSpinBox.value()
                 y = self.ui.logoYSpinBox.value()
                 if x >= 0 and x + logo_img.width <= width and y >= 0 and y + logo_img.height <= height:
                     self.current_image.paste(logo_img, (x, y), logo_img)
-                    self.labelPreview.logo_bbox = (x, y, x + logo_img.width, y + logo_img.height)
                 else:
-                    self.labelPreview.logo_bbox = None
+                    QtWidgets.QMessageBox.warning(self, "Warning", "Logo position is out of image bounds.")
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self, "Error", f"Failed to apply logo: {str(e)}")
-                self.labelPreview.logo_bbox = None
 
         # Apply header if text is provided
         if self.ui.HeaderEdit.text():
@@ -1031,13 +1009,18 @@ class MainWindow(QtWidgets.QMainWindow):
             text = self.ui.HeaderEdit.text()
             x = self.ui.headerXSpinBox.value()
             y = self.ui.headerYSpinBox.value()
+            if self.logo_image_path:
+                x = self.ui.logoXSpinBox.value()  # Align with logo
+                y = self.ui.logoYSpinBox.value() + self.logo_height + 10  # Place below logo with 10px gap
+                self.ui.headerXSpinBox.setValue(x)
+                self.ui.headerYSpinBox.setValue(y)
             if x >= 0 and x <= width and y >= 0 and y <= height:
                 color = (self.header_color.red(), self.header_color.green(), self.header_color.blue(), self.header_color.alpha())
                 draw.text((x, y), text, fill=color, font=font)
                 text_bbox = draw.textbbox((x, y), text, font=font)
                 self.labelPreview.header_bbox = text_bbox
             else:
-                self.labelPreview.header_bbox = None
+                QtWidgets.QMessageBox.warning(self, "Warning", "Header position is out of image bounds.")
 
         # Apply footer if text is provided
         if self.ui.FooterEdit.text():
@@ -1056,7 +1039,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 text_bbox = draw.textbbox((x, y), text, font=font)
                 self.labelPreview.footer_bbox = text_bbox
             else:
-                self.labelPreview.footer_bbox = None
+                QtWidgets.QMessageBox.warning(self, "Warning", "Footer position is out of image bounds.")
 
         self.display_image()
 
@@ -1082,7 +1065,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.apply_elements()
 
     def adjust_text_positions_after_crop(self, left, top, new_width, new_height):
-        """Điều chỉnh tọa độ văn bản và logo sau khi crop."""
+        """Điều chỉnh tọa độ văn bản sau khi crop."""
         if self.labelPreview.header_bbox:
             x = self.ui.headerXSpinBox.value() - left
             y = self.ui.headerYSpinBox.value() - top
@@ -1097,13 +1080,6 @@ class MainWindow(QtWidgets.QMainWindow):
             y = max(0, min(y, new_height))
             self.ui.footerXSpinBox.setValue(x)
             self.ui.footerYSpinBox.setValue(y)
-        if self.labelPreview.logo_bbox:
-            x = self.ui.logoXSpinBox.value() - left
-            y = self.ui.logoYSpinBox.value() - top
-            x = max(0, min(x, new_width))
-            y = max(0, min(y, new_height))
-            self.ui.logoXSpinBox.setValue(x)
-            self.ui.logoYSpinBox.setValue(y)
         self.apply_elements()
 
     def save_image(self):
@@ -1137,7 +1113,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.critical(self, "Error", f"Failed to save: {str(e)}")
 
     def delete_image(self):
-        self.current_image = Image.new('RGBA', (1200, 800), (0, 0, 0, 0))
+        self.current_image = Image.new('RGBA', (800, 600), (0, 0, 0, 0))
         self.original_image = self.current_image.copy()
         self.base_image = self.current_image.copy()
         self.image_path = None
@@ -1150,16 +1126,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.ImageName.setText("TemplateName")
         self.ui.HeaderEdit.setText("")
         self.ui.FooterEdit.setText("")
-        self.ui.headerXSpinBox.setValue(75)
-        self.ui.headerYSpinBox.setValue(60)
-        self.ui.footerXSpinBox.setValue(75)
-        self.ui.footerYSpinBox.setValue(720)
-        self.ui.logoXSpinBox.setValue(75)
-        self.ui.logoYSpinBox.setValue(50)
+        self.ui.headerXSpinBox.setValue(10)
+        self.ui.headerYSpinBox.setValue(120)
+        self.ui.footerXSpinBox.setValue(0)
+        self.ui.footerYSpinBox.setValue(550)
+        self.ui.logoXSpinBox.setValue(10)
+        self.ui.logoYSpinBox.setValue(10)
+        self.ui.logoSizeSpinBox.setValue(100)
         self.ui.headerFontCombo.setCurrentIndex(0)
         self.ui.footerFontCombo.setCurrentIndex(0)
-        self.ui.headerSizeSpinBox.setValue(20)
-        self.ui.footerSizeSpinBox.setValue(20)
+        self.ui.headerSizeSpinBox.setValue(36)
+        self.ui.footerSizeSpinBox.setValue(36)
         self.ui.headerColorButton.setStyleSheet("""
             QPushButton { 
                 background-color: #4682B4; 
@@ -1183,19 +1160,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelPreview.scale_factor = 1.0
         self.labelPreview.header_bbox = None
         self.labelPreview.footer_bbox = None
-        self.labelPreview.logo_bbox = None
         self.labelPreview.exit_modes()
         self.display_image()
 
     def undo(self):
         if self.history:
             self.current_image = self.history.pop()
-            self.base_image = self.current_image.copy()
+            self.base_image = self.current_image.copy()  # Update base_image
             self.labelPreview.header_bbox = None
             self.labelPreview.footer_bbox = None
-            self.labelPreview.logo_bbox = None
             self.display_image()
-            self.apply_elements()
+            self.apply_elements()  # Reapply elements
         else:
             QtWidgets.QMessageBox.information(self, "Undo", "No actions to undo.")
 
@@ -1206,10 +1181,10 @@ class MainWindow(QtWidgets.QMainWindow):
         header_height = 80
         sidebar_width = 150
         content_width = window_width - sidebar_width
-        content_height = window_height - header_height
         self.ui.frame.setGeometry(QtCore.QRect(0, 0, sidebar_width, header_height))
         self.ui.frame_2.setGeometry(QtCore.QRect(sidebar_width, 0, content_width, header_height))
         self.ui.header_label.setGeometry(QtCore.QRect(0, 0, content_width, header_height))
+        content_height = window_height - header_height
         self.ui.listWidget.setGeometry(QtCore.QRect(0, header_height, sidebar_width, content_height))
         self.ui.scrollArea.setGeometry(QtCore.QRect(sidebar_width, header_height, content_width, content_height))
         self.ui.stackedWidget.setMinimumSize(content_width, content_height)
@@ -1218,10 +1193,8 @@ class MainWindow(QtWidgets.QMainWindow):
         preview_width = content_width - 240
         preview_height = content_height - 200
         self.ui.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(10, 110, preview_width, preview_height))
-        self.ui.sidebarWidget.setGeometry(QtCore.QRect(content_width - 230, 110, 200, preview_height))
-        # Adjust toolbar position to minimize whitespace
-        toolbar_y = 110 + preview_height + 10  # Place just below preview
-        self.ui.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(10, toolbar_y, content_width - 40, 40))
+        self.ui.sidebarWidget.setGeometry(QtCore.QRect(content_width - 230, 110, 200, content_height - 200))
+        self.ui.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(10, content_height - 100, content_width - 40, 50))
         self.labelPreview.setGeometry(QtCore.QRect(10, 10, preview_width - 20, preview_height - 20))
         if self.current_image:
             self.display_image()
