@@ -71,7 +71,7 @@ class Ui_MainWindow(object):
         self.page = QtWidgets.QWidget()
         self.page.setObjectName("page")
         self.New_template = QtWidgets.QGroupBox(parent=self.page)
-        self.New_template.setGeometry(QtCore.QRect(7, 0, 1036, 610))  # Reduced height to minimize whitespace
+        self.New_template.setGeometry(QtCore.QRect(7, 0, 1036, 610))  # Adjusted height to minimize whitespace
         self.New_template.setStyleSheet("background-color: #FFFFFF; color: #000000;")
         self.New_template.setObjectName("New_template")
 
@@ -158,13 +158,13 @@ class Ui_MainWindow(object):
         self.headerTabLayout.addRow("Text:", self.HeaderEdit)
         self.headerXSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerXSpinBox.setStyleSheet("color: #000000;")
-        self.headerXSpinBox.setRange(0, 800)
-        self.headerXSpinBox.setValue(10)
+        self.headerXSpinBox.setRange(0, 1200)
+        self.headerXSpinBox.setValue(75)
         self.headerTabLayout.addRow("X:", self.headerXSpinBox)
         self.headerYSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerYSpinBox.setStyleSheet("color: #000000;")
-        self.headerYSpinBox.setRange(0, 600)
-        self.headerYSpinBox.setValue(120)
+        self.headerYSpinBox.setRange(0, 800)
+        self.headerYSpinBox.setValue(60)
         self.headerTabLayout.addRow("Y:", self.headerYSpinBox)
         self.headerFontCombo = QtWidgets.QComboBox(parent=self.headerTab)
         self.headerFontCombo.setStyleSheet("color: #000000;")
@@ -173,7 +173,7 @@ class Ui_MainWindow(object):
         self.headerSizeSpinBox = QtWidgets.QSpinBox(parent=self.headerTab)
         self.headerSizeSpinBox.setStyleSheet("color: #000000;")
         self.headerSizeSpinBox.setRange(8, 72)
-        self.headerSizeSpinBox.setValue(36)
+        self.headerSizeSpinBox.setValue(20)
         self.headerTabLayout.addRow("Size:", self.headerSizeSpinBox)
         self.headerColorButton = QtWidgets.QPushButton(parent=self.headerTab)
         self.headerColorButton.setText("Choose Color")
@@ -203,6 +203,20 @@ class Ui_MainWindow(object):
                 background-color: #5A9BD4; 
             }""")
         self.headerTabLayout.addRow(self.btnApplyHeader)
+        self.btnMoveHeaderLeft = QtWidgets.QPushButton(parent=self.headerTab)
+        self.btnMoveHeaderLeft.setText("Move to Left")
+        self.btnMoveHeaderLeft.setMinimumSize(QtCore.QSize(100, 30))
+        self.btnMoveHeaderLeft.setStyleSheet("""
+            QPushButton { 
+                background-color: #10B981; 
+                color: white; 
+                border-radius: 5px; 
+                padding: 8px; 
+            }
+            QPushButton:hover { 
+                background-color: #34D399; 
+            }""")
+        self.headerTabLayout.addRow(self.btnMoveHeaderLeft)
         self.tabWidget.addTab(self.headerTab, "Header")
 
         # Tab Footer
@@ -217,13 +231,13 @@ class Ui_MainWindow(object):
         self.footerTabLayout.addRow("Text:", self.FooterEdit)
         self.footerXSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerXSpinBox.setStyleSheet("color: #000000;")
-        self.footerXSpinBox.setRange(0, 800)
-        self.footerXSpinBox.setValue(0)
+        self.footerXSpinBox.setRange(0, 1200)
+        self.footerXSpinBox.setValue(75)
         self.footerTabLayout.addRow("X:", self.footerXSpinBox)
         self.footerYSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerYSpinBox.setStyleSheet("color: #000000;")
-        self.footerYSpinBox.setRange(0, 600)
-        self.footerYSpinBox.setValue(550)
+        self.footerYSpinBox.setRange(0, 800)
+        self.footerYSpinBox.setValue(720)
         self.footerTabLayout.addRow("Y:", self.footerYSpinBox)
         self.footerFontCombo = QtWidgets.QComboBox(parent=self.footerTab)
         self.footerFontCombo.setStyleSheet("color: #000000;")
@@ -232,7 +246,7 @@ class Ui_MainWindow(object):
         self.footerSizeSpinBox = QtWidgets.QSpinBox(parent=self.footerTab)
         self.footerSizeSpinBox.setStyleSheet("color: #000000;")
         self.footerSizeSpinBox.setRange(8, 72)
-        self.footerSizeSpinBox.setValue(36)
+        self.footerSizeSpinBox.setValue(20)
         self.footerTabLayout.addRow("Size:", self.footerSizeSpinBox)
         self.footerColorButton = QtWidgets.QPushButton(parent=self.footerTab)
         self.footerColorButton.setText("Choose Color")
@@ -286,13 +300,13 @@ class Ui_MainWindow(object):
         self.logoTabLayout.addRow(self.btnUploadLogo)
         self.logoXSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
         self.logoXSpinBox.setStyleSheet("color: #000000;")
-        self.logoXSpinBox.setRange(0, 800)
-        self.logoXSpinBox.setValue(10)
+        self.logoXSpinBox.setRange(0, 1200)
+        self.logoXSpinBox.setValue(75)
         self.logoTabLayout.addRow("X:", self.logoXSpinBox)
         self.logoYSpinBox = QtWidgets.QSpinBox(parent=self.logoTab)
         self.logoYSpinBox.setStyleSheet("color: #000000;")
-        self.logoYSpinBox.setRange(0, 600)
-        self.logoYSpinBox.setValue(10)
+        self.logoYSpinBox.setRange(0, 800)
+        self.logoYSpinBox.setValue(50)
         self.logoTabLayout.addRow("Y:", self.logoYSpinBox)
         self.btnApplyLogo = QtWidgets.QPushButton(parent=self.logoTab)
         self.btnApplyLogo.setText("Apply Logo")
@@ -308,6 +322,20 @@ class Ui_MainWindow(object):
                 background-color: #5A9BD4; 
             }""")
         self.logoTabLayout.addRow(self.btnApplyLogo)
+        self.btnMoveLogoLeft = QtWidgets.QPushButton(parent=self.logoTab)
+        self.btnMoveLogoLeft.setText("Move to Left")
+        self.btnMoveLogoLeft.setMinimumSize(QtCore.QSize(100, 30))
+        self.btnMoveLogoLeft.setStyleSheet("""
+            QPushButton { 
+                background-color: #10B981; 
+                color: white; 
+                border-radius: 5px; 
+                padding: 8px; 
+            }
+            QPushButton:hover { 
+                background-color: #34D399; 
+            }""")
+        self.logoTabLayout.addRow(self.btnMoveLogoLeft)
         self.tabWidget.addTab(self.logoTab, "Logo")
 
         self.sidebarLayout.addWidget(self.tabWidget)
@@ -744,7 +772,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelPreview.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
 
         # Khởi tạo canvas trắng
-        self.current_image = Image.new('RGBA', (800, 600), (0, 0, 0, 0))
+        self.current_image = Image.new('RGBA', (1200, 800), (0, 0, 0, 0))
         self.original_image = self.current_image.copy()
         self.base_image = self.current_image.copy()
         self.image_path = None
@@ -773,6 +801,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.headerColorButton.clicked.connect(self.choose_header_color)
         self.ui.footerColorButton.clicked.connect(self.choose_footer_color)
         self.ui.btnHighQuality.clicked.connect(self.toggle_high_quality)
+        self.ui.btnMoveHeaderLeft.clicked.connect(self.move_header_left)
+        self.ui.btnMoveLogoLeft.clicked.connect(self.move_logo_left)
 
         # Phím tắt
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+R"), self, self.rotate_image)
@@ -802,6 +832,8 @@ class MainWindow(QtWidgets.QMainWindow):
             "headerColorButton": self.ui.headerColorButton,
             "footerColorButton": self.ui.footerColorButton,
             "btnHighQuality": self.ui.btnHighQuality,
+            "btnMoveHeaderLeft": self.ui.btnMoveHeaderLeft,
+            "btnMoveLogoLeft": self.ui.btnMoveLogoLeft,
         }
         for name, button in buttons.items():
             try:
@@ -954,6 +986,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     background-color: {color.lighter(110).name()}; 
                 }}""")
 
+    def move_header_left(self):
+        self.ui.headerXSpinBox.setValue(75)
+        self.ui.headerYSpinBox.setValue(60)
+        self.apply_elements()
+
+    def move_logo_left(self):
+        self.ui.logoXSpinBox.setValue(75)
+        self.ui.logoYSpinBox.setValue(50)
+        self.apply_elements()
+
     def apply_elements(self):
         """Apply logo, header, and footer to the base image in order."""
         if not self.current_image:
@@ -989,11 +1031,6 @@ class MainWindow(QtWidgets.QMainWindow):
             text = self.ui.HeaderEdit.text()
             x = self.ui.headerXSpinBox.value()
             y = self.ui.headerYSpinBox.value()
-            if self.logo_image_path:
-                x = self.ui.logoXSpinBox.value()
-                y = self.ui.logoYSpinBox.value() + self.logo_height + 10
-                self.ui.headerXSpinBox.setValue(x)
-                self.ui.headerYSpinBox.setValue(y)
             if x >= 0 and x <= width and y >= 0 and y <= height:
                 color = (self.header_color.red(), self.header_color.green(), self.header_color.blue(), self.header_color.alpha())
                 draw.text((x, y), text, fill=color, font=font)
@@ -1100,7 +1137,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.critical(self, "Error", f"Failed to save: {str(e)}")
 
     def delete_image(self):
-        self.current_image = Image.new('RGBA', (800, 600), (0, 0, 0, 0))
+        self.current_image = Image.new('RGBA', (1200, 800), (0, 0, 0, 0))
         self.original_image = self.current_image.copy()
         self.base_image = self.current_image.copy()
         self.image_path = None
@@ -1113,16 +1150,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.ImageName.setText("TemplateName")
         self.ui.HeaderEdit.setText("")
         self.ui.FooterEdit.setText("")
-        self.ui.headerXSpinBox.setValue(10)
-        self.ui.headerYSpinBox.setValue(120)
-        self.ui.footerXSpinBox.setValue(0)
-        self.ui.footerYSpinBox.setValue(550)
-        self.ui.logoXSpinBox.setValue(10)
-        self.ui.logoYSpinBox.setValue(10)
+        self.ui.headerXSpinBox.setValue(75)
+        self.ui.headerYSpinBox.setValue(60)
+        self.ui.footerXSpinBox.setValue(75)
+        self.ui.footerYSpinBox.setValue(720)
+        self.ui.logoXSpinBox.setValue(75)
+        self.ui.logoYSpinBox.setValue(50)
         self.ui.headerFontCombo.setCurrentIndex(0)
         self.ui.footerFontCombo.setCurrentIndex(0)
-        self.ui.headerSizeSpinBox.setValue(36)
-        self.ui.footerSizeSpinBox.setValue(36)
+        self.ui.headerSizeSpinBox.setValue(20)
+        self.ui.footerSizeSpinBox.setValue(20)
         self.ui.headerColorButton.setStyleSheet("""
             QPushButton { 
                 background-color: #4682B4; 
