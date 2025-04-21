@@ -7,7 +7,7 @@ import numpy as np
 from collections import deque
 import tkinter as tk
 from function import CanvasEditorLogic
-from text_UI import EditorApp
+from UI import EditorApp
 
 # Code from Main_wd.py integrated here
 class Ui_MainWindow(object):

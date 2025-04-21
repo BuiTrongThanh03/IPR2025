@@ -69,10 +69,11 @@ class EditorApp:
         self.canvas = tk.Canvas(self.main_frame, bg="white")
         self.canvas.grid(row=0, column=0, columnspan=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 5), pady=(0, 5))
 
-        self.object_list_frame = ttk.Frame(self.main_frame)
-        self.object_list_frame.grid(row=0, column=2, sticky=(tk.N, tk.S, tk.W, tk.E), padx=5, pady=5)
-        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.object_list_frame = ttk.Frame(self.main_frame, width=100)
+        self.object_list_frame.grid(row=0, column=1, sticky=(tk.N, tk.S, tk.W, tk.E), padx=5, pady=5)
+        self.main_frame.grid_rowconfigure(0, weight=6)
         self.main_frame.grid_columnconfigure(1, weight=0)
+        
 
         self.object_listbox = tk.Listbox(self.object_list_frame, selectmode=tk.SINGLE, exportselection=False)
         self.list_scrollbar = ttk.Scrollbar(self.object_list_frame, orient=tk.VERTICAL, command=self.object_listbox.yview)
@@ -98,13 +99,13 @@ class EditorApp:
         self.add_shape_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.manipulation_frame = ttk.Frame(self.main_frame)
-        self.manipulation_frame.grid(row=1, column=2, sticky=(tk.W, tk.E), padx=5, pady=5)
+        self.manipulation_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), padx=5, pady=5)
 
-        self.manipulation_frame.grid_columnconfigure(0, weight=1)
-        self.manipulation_frame.grid_columnconfigure(1, weight=1)
-        self.manipulation_frame.grid_columnconfigure(2, weight=1)
-        self.manipulation_frame.grid_columnconfigure(3, weight=1)
-        self.manipulation_frame.grid_columnconfigure(4, weight=1)
+        self.manipulation_frame.grid_columnconfigure(0, weight=3)
+        self.manipulation_frame.grid_columnconfigure(1, weight=3)
+        self.manipulation_frame.grid_columnconfigure(2, weight=3)
+        self.manipulation_frame.grid_columnconfigure(3, weight=3)
+        self.manipulation_frame.grid_columnconfigure(4, weight=3)
 
         self.duplicate_button = ttk.Button(self.manipulation_frame, text="Duplicate", command=self.canvas_logic.duplicate_selected_object, state=tk.DISABLED)
         self.duplicate_button.grid(row=0, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
@@ -116,16 +117,16 @@ class EditorApp:
         self.lock_button.grid(row=0, column=2, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.forward_button = ttk.Button(self.manipulation_frame, text="Forward", command=self.canvas_logic.move_forward, state=tk.DISABLED)
-        self.forward_button.grid(row=0, column=3, padx=5, pady=5, sticky=(tk.W, tk.E))
+        self.forward_button.grid(row=1, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.backward_button = ttk.Button(self.manipulation_frame, text="Backward", command=self.canvas_logic.move_backward, state=tk.DISABLED)
-        self.backward_button.grid(row=0, column=4, padx=5, pady=5, sticky=(tk.W, tk.E))
+        self.backward_button.grid(row=1, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.to_front_button = ttk.Button(self.manipulation_frame, text="To Front", command=self.canvas_logic.move_to_front, state=tk.DISABLED)
-        self.to_front_button.grid(row=1, column=3, padx=5, pady=5, sticky=(tk.W, tk.E))
+        self.to_front_button.grid(row=2, column=0, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.to_back_button = ttk.Button(self.manipulation_frame, text="To Back", command=self.canvas_logic.move_to_back, state=tk.DISABLED)
-        self.to_back_button.grid(row=1, column=4, padx=5, pady=5, sticky=(tk.W, tk.E))
+        self.to_back_button.grid(row=2, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
 
         self.edit_frame = ttk.LabelFrame(self.main_frame, text="Edit Properties", padding="5")
         self.edit_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), padx=5, pady=5)
