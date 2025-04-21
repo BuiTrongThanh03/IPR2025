@@ -65,7 +65,6 @@ class EditorApp:
         self.main_frame.grid_rowconfigure(2, weight=0)
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_columnconfigure(1, weight=0)
-
         self.canvas = tk.Canvas(self.main_frame, bg="white")
         self.canvas.grid(row=0, column=0, columnspan=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 5), pady=(0, 5))
 
